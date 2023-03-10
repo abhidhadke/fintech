@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fintech/constants.dart' as constants;
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../constants.dart';
+
 class formField extends StatelessWidget {
   final String text;
   final BoxConstraints size;
@@ -28,24 +30,24 @@ class formField extends StatelessWidget {
           TextField(
             onChanged: onChanged,
             style: const TextStyle(
-              color: Colors.white,
+              color: bgPrimary,
             ),
             obscureText: isPassword,
             decoration: InputDecoration(
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
                 borderSide: BorderSide(
-                    color: isFilled ? Colors.white70 : Colors.redAccent, width: 2, style: BorderStyle.solid),
+                    color: isFilled ? secondary : btnColor, width: 2, style: BorderStyle.solid),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
                 borderSide: BorderSide(
-                    color: isFilled ? Colors.white70 : Colors.redAccent, width: 2, style: BorderStyle.solid),
+                    color: isFilled ? secondary : btnColor, width: 2, style: BorderStyle.solid),
               ),
               hintText: text,
               hintStyle: TextStyle(
-                color: Colors.white54,
-                fontSize: size.maxWidth * 0.04,
+                color: Colors.grey,
+                fontSize: size.maxWidth * 0.06,
                 fontWeight: FontWeight.w500,
                 fontStyle: FontStyle.italic,
                 fontFamily: 'Poppins',

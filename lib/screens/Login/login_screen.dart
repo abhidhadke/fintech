@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       return Scaffold(
-        backgroundColor: bgNight,
+        backgroundColor: bgSecondary,
         body: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -60,6 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ElevatedButtonTheme(
                       data: ElevatedButtonThemeData(
                         style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(btnColor),
                           textStyle: MaterialStateProperty.all(GoogleFonts.poppins(
                             fontSize: constraints.maxWidth * 0.07,
                             fontWeight: FontWeight.w600
@@ -77,45 +78,46 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       child: ElevatedButton(
                         onPressed: () async {
+                          await _pushtoNextScreen();
                           debugPrint('tapped');
-                          if(email == ''){
-                            if(password == ''){
-                              setState(() {
-                                emailFill = false;
-                                passFill = false;
-                              });
-                            }else{
-                              setState(() {
-                                emailFill = false;
-                              });
-                            }
-                          }
-                          else if(password == ''){
-                            if(email == ''){
-                              setState(() {
-                                emailFill = false;
-                                passFill = false;
-                              });
-                            }else{
-                              setState(() {
-                                passFill = false;
-                              });
-                            }
-                          }
-                          else{
-                            setState(() {
-                              isLoading = true;
-                              passFill = true;
-                              emailFill = true;
-                            });
-
-                            // firebase login code goes here
-                            final user = await _auth.signInWithEmailAndPassword(email: email, password: password);
-                            if(user.user != null){
-                             await _pushtoNextScreen();
-                            }
-                            //end of code
-                          }
+                          // if(email == ''){
+                          //   if(password == ''){
+                          //     setState(() {
+                          //       emailFill = false;
+                          //       passFill = false;
+                          //     });
+                          //   }else{
+                          //     setState(() {
+                          //       emailFill = false;
+                          //     });
+                          //   }
+                          // }
+                          // else if(password == ''){
+                          //   if(email == ''){
+                          //     setState(() {
+                          //       emailFill = false;
+                          //       passFill = false;
+                          //     });
+                          //   }else{
+                          //     setState(() {
+                          //       passFill = false;
+                          //     });
+                          //   }
+                          // }
+                          // else{
+                          //   setState(() {
+                          //     isLoading = true;
+                          //     passFill = true;
+                          //     emailFill = true;
+                          //   });
+                          //
+                          //   // firebase login code goes here
+                          //   //final user = await _auth.signInWithEmailAndPassword(email: email, password: password);
+                          //   // if(user.user != null){
+                          //   //  await _pushtoNextScreen();
+                          //   // }
+                          //   //end of code
+                          // }
 
                         },
                         child: isLoading ? const CircularProgressIndicator() : Text('Login', style: GoogleFonts.poppins(),),
