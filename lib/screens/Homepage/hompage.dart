@@ -1,6 +1,6 @@
 import 'package:fintech/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/rendering.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
@@ -15,6 +15,7 @@ class _HomepageState extends State<Homepage> {
     return LayoutBuilder(
       builder: (context, constraint) {
         return Scaffold(
+            backgroundColor: bgSecondary,
             extendBodyBehindAppBar: false,
             body: Column(
               children: [
@@ -30,6 +31,7 @@ class _HomepageState extends State<Homepage> {
                           'Welcome, \nUsername !',
                           style: TextStyle(
                             fontSize: constraint.maxWidth * 0.06,
+                            color: secondary,
                           ),
                         ),
                         width: constraint.maxWidth * 0.4,
@@ -46,10 +48,13 @@ class _HomepageState extends State<Homepage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text('20000 fs', style: TextStyle(
-                              fontSize: constraint.maxWidth*0.07,
-                              fontWeight: FontWeight.w600,
-                            ),),
+                            Text(
+                              '20000 fs',
+                              style: TextStyle(
+                                fontSize: constraint.maxWidth * 0.075,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                           ],
                         ),
                       )
@@ -68,7 +73,36 @@ class _HomepageState extends State<Homepage> {
                       ),
                     ),
                     child: ListView(
-                      children: [],
+                      children: [
+                        Container(
+                          width: constraint.maxWidth,
+                          height: constraint.maxHeight * 0.2,
+                          child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: 5,
+                              itemBuilder: (context2, index) {
+                                return Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: constraint.maxWidth * 0.05),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.pink,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(
+                                          30.0,
+                                        ),
+                                      ),
+                                    ),
+                                    width: constraint.maxWidth * 0.7,
+                                  ),
+                                );
+                              }),
+                        ),
+                        Container(
+                          width: constraint.maxWidth,
+                          height: constraint.maxHeight,
+                        )
+                      ],
                     ),
                   ),
                 ),
