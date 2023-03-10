@@ -1,7 +1,9 @@
 import 'package:fintech/constants.dart';
+import 'package:fintech/screens/Homepage/hompage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'components/textfield.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -15,6 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool passFill = true;
   bool emailFill = true;
   bool isLoading = false;
+  final _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         )
                       ),
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           debugPrint('tapped');
                           if(email == ''){
                             if(password == ''){
@@ -107,7 +110,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             });
 
                             // firebase login code goes here
-
+                            final user = await _auth.signInWithEmailAndPassword(email: email, password: password);
+                            if(user.user != null){
+                             await _pushtoNextScreen();
+                            }
                             //end of code
                           }
 
@@ -124,5 +130,10 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
     });
+  }
+
+  _pushtoNextScreen() async {
+    await Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> const Homepage()));
+
   }
 }
