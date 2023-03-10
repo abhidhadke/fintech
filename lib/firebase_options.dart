@@ -50,20 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAlAG7fd4Ffs9lc2JLGZMtbqWbGOZRdJjI',
-    appId: '1:963286394642:android:23ae47f9db4e65911d75cb',
-    messagingSenderId: '963286394642',
-    projectId: 'fintech-e3000',
-    storageBucket: 'fintech-e3000.appspot.com',
+    apiKey: 'AIzaSyAFxVazHVDI8kVEHH7rxPzj_LbmFBBe05I',
+    appId: '1:16027971636:android:8b64e6219c218f91be1a61',
+    messagingSenderId: '16027971636',
+    projectId: 'wallstreetharvest-57770',
+    storageBucket: 'wallstreetharvest-57770.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyC6awVcv-_-fR9XEHMCWS_i61GYgrHHcyg',
-    appId: '1:963286394642:ios:a3a7a173093e72fc1d75cb',
-    messagingSenderId: '963286394642',
-    projectId: 'fintech-e3000',
-    storageBucket: 'fintech-e3000.appspot.com',
-    iosClientId: '963286394642-tpv361hbmrvloq8v9knbu0pbm99vo4ur.apps.googleusercontent.com',
+    apiKey: 'AIzaSyCbYRS1V1RQweB9_XgiUaPnexmTOGP9OJs',
+    appId: '1:16027971636:ios:5ce6a0d360d83e71be1a61',
+    messagingSenderId: '16027971636',
+    projectId: 'wallstreetharvest-57770',
+    storageBucket: 'wallstreetharvest-57770.appspot.com',
+    iosClientId: '16027971636-45rr80fbd7a63ah9tdvtdsmdku9u3rno.apps.googleusercontent.com',
     iosBundleId: 'com.example.fintech',
   );
 }

@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:fintech/constants.dart' as constants;
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../constants.dart';
 
-class formField extends StatelessWidget {
+class Formfield extends StatelessWidget {
   final String text;
   final BoxConstraints size;
   final bool isPassword;
   final bool isFilled;
   final Function(String) onChanged;
 
-  const formField({
+  const Formfield({
     super.key,
     required this.size,
     required this.text,
@@ -30,24 +29,24 @@ class formField extends StatelessWidget {
           TextField(
             onChanged: onChanged,
             style: const TextStyle(
-              color: bgPrimary,
+              color: secondary,
             ),
             obscureText: isPassword,
             decoration: InputDecoration(
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
                 borderSide: BorderSide(
-                    color: isFilled ? secondary : btnColor, width: 2, style: BorderStyle.solid),
+                    color: isFilled ? secondary : Colors.redAccent, width: 2, style: BorderStyle.solid),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
                 borderSide: BorderSide(
-                    color: isFilled ? secondary : btnColor, width: 2, style: BorderStyle.solid),
+                    color: isFilled ? secondary : Colors.redAccent, width: 2, style: BorderStyle.solid),
               ),
               hintText: text,
               hintStyle: TextStyle(
                 color: Colors.grey,
-                fontSize: size.maxWidth * 0.06,
+                fontSize: size.maxWidth * 0.04,
                 fontWeight: FontWeight.w500,
                 fontStyle: FontStyle.italic,
                 fontFamily: 'Poppins',
