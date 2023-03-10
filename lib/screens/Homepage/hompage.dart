@@ -98,10 +98,37 @@ class _HomepageState extends State<Homepage> {
                                 );
                               }),
                         ),
-                        Container(
-                          width: constraint.maxWidth,
-                          height: constraint.maxHeight,
-                        )
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(
+                              constraint.maxWidth * 0.05,
+                              constraint.maxWidth * 0.1,
+                              constraint.maxWidth * 0.05,
+                              0.0),
+                          child: Container(
+                            decoration: const BoxDecoration(
+
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(15.0),
+                                )),
+                            width: constraint.maxWidth,
+                            height: constraint.maxHeight*0.4,
+                            child: ListView.builder(
+                                itemCount: 5,
+                                itemBuilder: (context3, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.pink,
+                                        borderRadius: BorderRadius.all(Radius.circular(20.0))
+                                      ),
+                                      width: constraint.maxWidth * 0.8,
+                                      height: constraint.maxHeight*0.15,
+                                    ),
+                                  );
+                                }),
+                          ),
+                        ),
                       ],
                     ),
                   ),
