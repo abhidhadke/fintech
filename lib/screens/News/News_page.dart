@@ -38,8 +38,9 @@ class _NewsPageState extends State<NewsPage> {
                     return Card(
                       color: bgSecondary,
                       child: ListTile(
-                        title: Text('News title', style: GoogleFonts.poppins(color: secondary), maxLines: 2, overflow: TextOverflow.ellipsis,),
-                        subtitle: Text(dummy, style: GoogleFonts.poppins(color: secondary), maxLines: 2, overflow: TextOverflow.ellipsis,),
+                        contentPadding: const EdgeInsets.fromLTRB(15, 12, 15, 12),
+                        title: Text('News title', style: GoogleFonts.poppins(color: secondary, fontSize: constraints.maxWidth * 0.043, fontWeight: FontWeight.w600), maxLines: 2, overflow: TextOverflow.ellipsis,),
+                        subtitle: Text(dummy, style: GoogleFonts.poppins(color: secondary, fontSize: constraints.maxWidth * 0.036, fontWeight: FontWeight.w400), maxLines: 2, overflow: TextOverflow.ellipsis,),
                         trailing: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.end,
