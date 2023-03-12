@@ -5,12 +5,12 @@ import 'package:intl/intl.dart';
 import '../../../constants.dart';
 import '../expand_news.dart';
 
-class newsCard extends StatelessWidget {
+class NewsCard extends StatelessWidget {
   final BoxConstraints constraints;
   final String newsTitle;
   final String newsBody;
   final DateTime newsDate;
-  const newsCard({
+  const NewsCard({
     super.key, required this.constraints, required this.newsTitle, required this.newsBody, required this.newsDate,
   });
 
@@ -57,7 +57,7 @@ class newsCard extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (_) => ExpandNews()));
+                  builder: (_) => ExpandNews(newsTitle: newsTitle, newsBody: newsBody,)));
         },
       ),
     );

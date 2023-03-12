@@ -1,10 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintech/constants.dart';
-import 'package:fintech/network/model/firebase_model.dart';
-import 'package:fintech/screens/News/expand_news.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'components/appBar.dart';
 import 'components/news_card.dart';
 
@@ -16,14 +12,6 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State<NewsPage> {
-  List<Map> _newsList = [];
-
-  @override
-  void initState() {
-    // TODO: implement initState
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +23,7 @@ class _NewsPageState extends State<NewsPage> {
           children: [
             Expanded(
               child: Container(
+                width: constraints.maxWidth,
                 decoration: const BoxDecoration(
                   color: secondary,
                   borderRadius: BorderRadius.only(
@@ -50,8 +39,14 @@ class _NewsPageState extends State<NewsPage> {
                         .orderBy('news_time', descending: true)
                         .snapshots(),
                     builder: (context, snapshot) {
+
                       if (!snapshot.hasData) {
-                        return const CircularProgressIndicator();
+                        return Center(
+                          child: SizedBox(
+                            height: constraints.maxHeight * 0.05,
+                            child: const CircularProgressIndicator(),
+                          ),
+                        );
                       }
                       final userData = snapshot.data?.docs;
                       if (userData!.isEmpty) {
@@ -62,7 +57,7 @@ class _NewsPageState extends State<NewsPage> {
                       return ListView.builder(
                           itemCount: userData.length,
                           itemBuilder: (context, index) {
-                            return newsCard(
+                            return NewsCard(
                               constraints: constraints,
                               newsTitle: userData[index]['news_title'],
                               newsBody: userData[index]['news_body'],

@@ -5,7 +5,9 @@ import '../../constants.dart';
 import 'components/appBar.dart';
 
 class ExpandNews extends StatelessWidget {
-  const ExpandNews({Key? key}) : super(key: key);
+  final String newsTitle;
+  final String newsBody;
+  const ExpandNews({Key? key, required this.newsTitle, required this.newsBody}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +31,11 @@ class ExpandNews extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 30, left: 10, right: 10),
                 child: ListTile(
                   title: Text(
-                    'lorem Ipsum',
+                    newsTitle,
                     style: GoogleFonts.poppins(color: bgPrimary, fontWeight: FontWeight.w700, fontSize: constraints.maxWidth * 0.06),
                   ),
                   subtitle: Text(
-                    dummy,
+                    newsBody,
                     style: GoogleFonts.poppins(color: bgPrimary, fontWeight: FontWeight.w300, fontSize: constraints.maxWidth * 0.04),
                   ),
                 ),
