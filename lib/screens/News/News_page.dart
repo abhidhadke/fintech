@@ -33,7 +33,7 @@ class _NewsPageState extends State<NewsPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 30, left: 10, right: 10),
                   child: ListView.builder(
-                      itemCount: 100,
+                      itemCount: 10,
                       itemBuilder: (context, index) {
                     return Card(
                       color: bgSecondary,
