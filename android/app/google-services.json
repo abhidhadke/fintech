@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "963286394642",
-    "project_id": "fintech-e3000",
-    "storage_bucket": "fintech-e3000.appspot.com"
+    "project_number": "16027971636",
+    "project_id": "wallstreetharvest-57770",
+    "storage_bucket": "wallstreetharvest-57770.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:963286394642:android:23ae47f9db4e65911d75cb",
+        "mobilesdk_app_id": "1:16027971636:android:8b64e6219c218f91be1a61",
         "android_client_info": {
           "package_name": "com.example.fintech"
         }
       },
       "oauth_client": [
         {
-          "client_id": "963286394642-vkn8c8vbgedg23m3l5ra9cilp7tksqk7.apps.googleusercontent.com",
+          "client_id": "16027971636-v0fqrdsl4t2pv6sjl7993krjp9ar5plq.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAlAG7fd4Ffs9lc2JLGZMtbqWbGOZRdJjI"
+          "current_key": "AIzaSyAFxVazHVDI8kVEHH7rxPzj_LbmFBBe05I"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "963286394642-vkn8c8vbgedg23m3l5ra9cilp7tksqk7.apps.googleusercontent.com",
+              "client_id": "16027971636-v0fqrdsl4t2pv6sjl7993krjp9ar5plq.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
