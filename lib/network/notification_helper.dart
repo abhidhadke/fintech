@@ -9,7 +9,9 @@ class HelperNotification{
     var androidInitialize = const AndroidInitializationSettings('icon');
     var iOSInitialize = const DarwinInitializationSettings();
     var initializeSettings = InitializationSettings(android: androidInitialize, iOS: iOSInitialize);
-    flutterLocalNotificationsPlugin.initialize(initializeSettings);
+    flutterLocalNotificationsPlugin.initialize(initializeSettings,
+
+    );
 
     await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
       alert: true,

@@ -1,5 +1,6 @@
 import 'package:fintech/constants.dart';
 import 'package:fintech/screens/Homepage/hompage.dart';
+import 'package:fintech/screens/News/News_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -147,7 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _pushtoNextScreen() async {
-    await Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> const Homepage()));
+    await Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> const NewsPage()));
 
   }
 }
