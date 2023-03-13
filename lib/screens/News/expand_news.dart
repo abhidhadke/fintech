@@ -7,7 +7,8 @@ import 'components/appBar.dart';
 class ExpandNews extends StatelessWidget {
   final String newsTitle;
   final String newsBody;
-  const ExpandNews({Key? key, required this.newsTitle, required this.newsBody}) : super(key: key);
+  final String url;
+  const ExpandNews({Key? key, required this.newsTitle, required this.newsBody, required this.url}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +35,16 @@ class ExpandNews extends StatelessWidget {
                     newsTitle,
                     style: GoogleFonts.poppins(color: bgPrimary, fontWeight: FontWeight.w700, fontSize: constraints.maxWidth * 0.06),
                   ),
-                  subtitle: Text(
-                    newsBody,
-                    style: GoogleFonts.poppins(color: bgPrimary, fontWeight: FontWeight.w300, fontSize: constraints.maxWidth * 0.04),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Image.network(url),
+                      Text(
+                        newsBody,
+                        style: GoogleFonts.poppins(color: bgPrimary, fontWeight: FontWeight.w300, fontSize: constraints.maxWidth * 0.04),
+                      ),
+                    ].map((e) => Padding(padding: const EdgeInsets.all(10), child: e,)).toList(),
                   ),
                 ),
               ),

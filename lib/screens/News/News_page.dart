@@ -62,6 +62,7 @@ class _NewsPageState extends State<NewsPage> {
                               newsTitle: userData[index]['news_title'],
                               newsBody: userData[index]['news_body'],
                               newsDate: userData[index]['news_time'].toDate(),
+                              url: userData[index]['url'],
                             );
                           });
                     },

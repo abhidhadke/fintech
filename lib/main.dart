@@ -1,4 +1,5 @@
 import 'package:fintech/network/notification_helper.dart';
+import 'package:fintech/screens/Homepage/hompage.dart';
 import 'package:fintech/screens/Login/login_screen.dart';
 import 'package:fintech/screens/News/News_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: const LoginScreen(),
+      home: const Homepage(),
     );
   }
 }

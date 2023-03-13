@@ -148,7 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _pushtoNextScreen() async {
-    await Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> const NewsPage()));
+    await Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> const Homepage()));
 
   }
 }

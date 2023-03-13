@@ -1,4 +1,5 @@
 import 'package:fintech/constants.dart';
+import 'package:fintech/screens/News/News_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -84,16 +85,19 @@ class _HomepageState extends State<Homepage> {
                                 return Padding(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: constraint.maxWidth * 0.05),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.pink,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(
-                                          30.0,
+                                  child: GestureDetector(
+                                    onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>NewsPage())),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: secondary,
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(
+                                            30.0,
+                                          ),
                                         ),
                                       ),
+                                      width: constraint.maxWidth * 0.7,
                                     ),
-                                    width: constraint.maxWidth * 0.7,
                                   ),
                                 );
                               }),

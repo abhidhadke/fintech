@@ -10,8 +10,9 @@ class NewsCard extends StatelessWidget {
   final String newsTitle;
   final String newsBody;
   final DateTime newsDate;
+  final String url;
   const NewsCard({
-    super.key, required this.constraints, required this.newsTitle, required this.newsBody, required this.newsDate,
+    super.key, required this.constraints, required this.newsTitle, required this.newsBody, required this.newsDate, required this.url,
   });
 
   @override
@@ -57,7 +58,7 @@ class NewsCard extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (_) => ExpandNews(newsTitle: newsTitle, newsBody: newsBody,)));
+                  builder: (_) => ExpandNews(newsTitle: newsTitle, newsBody: newsBody, url: url,)));
         },
       ),
     );
