@@ -4,6 +4,7 @@ import 'package:fintech/screens/News/News_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'components/textfield.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -115,6 +116,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             try{
                               final user = await _auth.signInWithEmailAndPassword(email: email, password: password);
                               if(user.user != null){
+                                final prefs = await SharedPreferences.getInstance();
+                                await prefs.setBool('login', true);
                                 await _pushtoNextScreen();
                               }
                               else{

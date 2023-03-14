@@ -31,7 +31,7 @@ class StocksCard extends StatelessWidget {
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('fs $stockPrice', style: GoogleFonts.poppins(fontSize: constraint.maxWidth * 0.035, fontWeight: FontWeight.w400),),
+              Text('fs $stockPrice', style: GoogleFonts.poppins(fontSize: constraint.maxWidth * 0.035, fontWeight: FontWeight.w500),),
               _arrowSign(stockPrice),
             ],
           ),
