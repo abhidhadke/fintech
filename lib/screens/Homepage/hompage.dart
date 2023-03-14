@@ -1,7 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintech/constants.dart';
-import 'package:fintech/screens/News/News_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'components/HomeCard.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
@@ -28,6 +28,7 @@ class _HomepageState extends State<Homepage> {
                   child: Row(
                     children: [
                       SizedBox(
+                        width: constraint.maxWidth * 0.4,
                         child: Text(
                           'Welcome, \nUsername !',
                           style: TextStyle(
@@ -35,11 +36,10 @@ class _HomepageState extends State<Homepage> {
                             color: secondary,
                           ),
                         ),
-                        width: constraint.maxWidth * 0.4,
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Container(
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(30.0)),
                           color: btnColor,
                         ),
@@ -75,32 +75,46 @@ class _HomepageState extends State<Homepage> {
                     ),
                     child: ListView(
                       children: [
-                        Container(
+                        SizedBox(
                           width: constraint.maxWidth,
-                          height: constraint.maxHeight * 0.2,
-                          child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: 5,
-                              itemBuilder: (context2, index) {
-                                return Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: constraint.maxWidth * 0.05),
-                                  child: GestureDetector(
-                                    onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>NewsPage())),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: secondary,
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(
-                                            30.0,
-                                          ),
-                                        ),
-                                      ),
-                                      width: constraint.maxWidth * 0.7,
+                          height: constraint.maxHeight * 0.18,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10, top: 8, bottom: 8),
+                            child: StreamBuilder<
+                                QuerySnapshot<Map<String, dynamic>>>(
+                              stream: FirebaseFirestore.instance
+                                  .collection('news_alerts')
+                                  .orderBy('news_time', descending: true)
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData) {
+                                  return Center(
+                                    child: SizedBox(
+                                      height: constraint.maxHeight * 0.05,
+                                      child: const CircularProgressIndicator(color: Colors.blue,),
                                     ),
-                                  ),
-                                );
-                              }),
+                                  );
+                                }
+                                final userData = snapshot.data?.docs;
+                                if (userData!.isEmpty) {
+                                  return const Center(
+                                    child: Text('No Data'),
+                                  );
+                                }
+                                return ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: userData.length,
+                                    padding: const EdgeInsets.only(right: 5),
+                                    itemBuilder: (context, index) {
+                                      return HomeCard(
+                                        constraint: constraint,
+                                        title: userData[index]['news_title'],
+                                        body: userData[index]['news_body'],
+                                      );
+                                    });
+                              },
+                            ),
+                          ),
                         ),
                         Padding(
                           padding: EdgeInsets.fromLTRB(
@@ -110,24 +124,23 @@ class _HomepageState extends State<Homepage> {
                               0.0),
                           child: Container(
                             decoration: const BoxDecoration(
-
                                 borderRadius: BorderRadius.all(
-                                  Radius.circular(15.0),
-                                )),
+                              Radius.circular(15.0),
+                            )),
                             width: constraint.maxWidth,
-                            height: constraint.maxHeight*0.4,
+                            height: constraint.maxHeight * 0.4,
                             child: ListView.builder(
                                 itemCount: 5,
                                 itemBuilder: (context3, index) {
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Container(
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                           color: Colors.pink,
-                                        borderRadius: BorderRadius.all(Radius.circular(20.0))
-                                      ),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20.0))),
                                       width: constraint.maxWidth * 0.8,
-                                      height: constraint.maxHeight*0.15,
+                                      height: constraint.maxHeight * 0.15,
                                     ),
                                   );
                                 }),

@@ -30,21 +30,24 @@ class ExpandNews extends StatelessWidget {
               ),
               child: Padding(
                 padding: const EdgeInsets.only(top: 30, left: 10, right: 10),
-                child: ListTile(
-                  title: Text(
-                    newsTitle,
-                    style: GoogleFonts.poppins(color: bgPrimary, fontWeight: FontWeight.w700, fontSize: constraints.maxWidth * 0.06),
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Image.network(url),
-                      Text(
-                        newsBody,
-                        style: GoogleFonts.poppins(color: bgPrimary, fontWeight: FontWeight.w300, fontSize: constraints.maxWidth * 0.04),
-                      ),
-                    ].map((e) => Padding(padding: const EdgeInsets.all(10), child: e,)).toList(),
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: ListTile(
+                    title: Text(
+                      newsTitle,
+                      style: GoogleFonts.poppins(color: bgPrimary, fontWeight: FontWeight.w700, fontSize: constraints.maxWidth * 0.06),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Image.network(url),
+                        Text(
+                          newsBody,
+                          style: GoogleFonts.poppins(color: bgPrimary, fontWeight: FontWeight.w300, fontSize: constraints.maxWidth * 0.04),
+                        ),
+                      ].map((e) => Padding(padding: const EdgeInsets.all(10), child: e,)).toList(),
+                    ),
                   ),
                 ),
               ),
