@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintech/constants.dart';
 import 'package:flutter/material.dart';
 import 'components/HomeCard.dart';
+import 'components/stock_card.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
@@ -79,7 +80,8 @@ class _HomepageState extends State<Homepage> {
                           width: constraint.maxWidth,
                           height: constraint.maxHeight * 0.18,
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 10, right: 10, top: 8, bottom: 8),
+                            padding: const EdgeInsets.only(
+                                left: 10, right: 10, top: 8, bottom: 8),
                             child: StreamBuilder<
                                 QuerySnapshot<Map<String, dynamic>>>(
                               stream: FirebaseFirestore.instance
@@ -91,7 +93,9 @@ class _HomepageState extends State<Homepage> {
                                   return Center(
                                     child: SizedBox(
                                       height: constraint.maxHeight * 0.05,
-                                      child: const CircularProgressIndicator(color: Colors.blue,),
+                                      child: const CircularProgressIndicator(
+                                        color: Colors.blue,
+                                      ),
                                     ),
                                   );
                                 }
@@ -109,7 +113,6 @@ class _HomepageState extends State<Homepage> {
                                       return HomeCard(
                                         constraint: constraint,
                                         title: userData[index]['news_title'],
-                                        body: userData[index]['news_body'],
                                       );
                                     });
                               },
@@ -129,21 +132,44 @@ class _HomepageState extends State<Homepage> {
                             )),
                             width: constraint.maxWidth,
                             height: constraint.maxHeight * 0.4,
-                            child: ListView.builder(
-                                itemCount: 5,
-                                itemBuilder: (context3, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Container(
-                                      decoration: const BoxDecoration(
-                                          color: Colors.pink,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20.0))),
-                                      width: constraint.maxWidth * 0.8,
-                                      height: constraint.maxHeight * 0.15,
+                            child: StreamBuilder<
+                                QuerySnapshot<Map<String, dynamic>>>(
+                              stream: FirebaseFirestore.instance
+                                  .collection('company')
+                                  .orderBy('name', descending: true)
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData) {
+                                  return Center(
+                                    child: SizedBox(
+                                      height: constraint.maxHeight * 0.05,
+                                      child: const CircularProgressIndicator(
+                                        color: Colors.blue,
+                                      ),
                                     ),
                                   );
-                                }),
+                                }
+                                final userData = snapshot.data?.docs;
+
+                                if (userData!.isEmpty) {
+                                  return const Center(
+                                    child: Text('No Data'),
+                                  );
+                                }
+                                return ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    itemCount: userData.length,
+                                    padding: const EdgeInsets.only(right: 5),
+                                    itemBuilder: (context, index) {
+                                      return StocksCard(
+                                          constraint: constraint,
+                                          stockName: userData[index]['name'],
+                                          stockLogo: userData[index]['link'],
+                                          stockPrice: userData[index]['price']
+                                              .toDouble());
+                                    });
+                              },
+                            ),
                           ),
                         ),
                       ],

@@ -12,7 +12,6 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State<NewsPage> {
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
@@ -39,7 +38,6 @@ class _NewsPageState extends State<NewsPage> {
                         .orderBy('news_time', descending: true)
                         .snapshots(),
                     builder: (context, snapshot) {
-
                       if (!snapshot.hasData) {
                         return Center(
                           child: SizedBox(
