@@ -1,17 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintech/constants.dart';
+import 'package:fintech/network/model/users.dart';
 import 'package:flutter/material.dart';
 import 'components/HomeCard.dart';
 import 'components/stock_card.dart';
 
 class Homepage extends StatefulWidget {
-  const Homepage({Key? key}) : super(key: key);
+  final String uid;
+  const Homepage({Key? key, required this.uid}) : super(key: key);
 
   @override
   State<Homepage> createState() => _HomepageState();
 }
 
 class _HomepageState extends State<Homepage> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    userData(widget.uid);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

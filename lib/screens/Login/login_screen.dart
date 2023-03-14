@@ -20,6 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool emailFill = true;
   bool isLoading = false;
   final _auth = FirebaseAuth.instance;
+  String uid = '';
 
   @override
   Widget build(BuildContext context) {
@@ -115,9 +116,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             // firebase login code goes here
                             try{
                               final user = await _auth.signInWithEmailAndPassword(email: email, password: password);
-                              if(user.user != null){
+                              final userData = user.user;
+                              if(userData != null){
                                 final prefs = await SharedPreferences.getInstance();
                                 await prefs.setBool('login', true);
+                                uid = userData.uid;
+                                await prefs.setString('uid', uid);
+                                debugPrint(uid);
                                 await _pushtoNextScreen();
                               }
                               else{
@@ -151,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _pushtoNextScreen() async {
-    await Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> const Homepage()));
+    await Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>  Homepage(uid: uid,)));
 
   }
 }

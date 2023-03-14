@@ -32,15 +32,17 @@ Future<void> main() async {
 
   final prefs = await SharedPreferences.getInstance();
   bool login = prefs.getBool('login') ?? false;
+  String uid = prefs.getString('uid') ?? '';
   debugPrint('Is user Logged in? : $login');
   
 
-  runApp(MyApp(isLoggedIn: login,));
+  runApp(MyApp(isLoggedIn: login, uid: uid,));
 }
 
 class MyApp extends StatelessWidget {
   final bool isLoggedIn;
-  const MyApp({super.key, required this.isLoggedIn});
+  final String uid;
+  const MyApp({super.key, required this.isLoggedIn, required this.uid});
 
 
   // This widget is the root of your application.
@@ -52,7 +54,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: isLoggedIn ? const Homepage() : const LoginScreen(),
+      home: isLoggedIn ?  Homepage(uid: uid,) : const LoginScreen(),
     );
   }
 }
