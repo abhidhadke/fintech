@@ -21,8 +21,10 @@ class HomeCard extends StatelessWidget {
         child: SizedBox(
           width: constraint.maxWidth * 0.6,
           child: Card(
+            color: secondary,
             elevation: 4,
             child: ListTile(
+
               contentPadding:
               const EdgeInsets.fromLTRB(15, 12, 15, 12),
               title: Text(title, style: GoogleFonts.poppins(fontWeight: FontWeight.w700, fontSize: constraint.maxWidth * 0.05), maxLines: 1, overflow: TextOverflow.ellipsis,),
