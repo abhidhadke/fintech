@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-
 import 'components/chartData.dart';
 
 class StocksScreen extends StatefulWidget {
@@ -27,13 +25,16 @@ class _StocksScreenState extends State<StocksScreen> {
 
   Future<void> getDataFromFireStore() async {
     List<ChartData> list = [];
-    var snapShotsValue =
-        await FirebaseFirestore.instance.collection("history").doc(widget.stockName).get();
+    var snapShotsValue = await FirebaseFirestore.instance
+        .collection("history")
+        .doc(widget.stockName)
+        .get();
 
     var docData = snapShotsValue.data();
     int docLen = docData?.keys.length ?? 0;
-    for(int i = 1; i <= (docLen / 2); i++){
-      list.add(ChartData(x: docData!['time$i'].toDate(), y: docData['price$i'].toDouble()));
+    for (int i = 1; i <= (docLen / 2); i++) {
+      list.add(ChartData(
+          x: docData!['time$i'].toDate(), y: docData['price$i'].toDouble()));
     }
 
     setState(() {
@@ -52,17 +53,14 @@ class _StocksScreenState extends State<StocksScreen> {
           body: Column(
             children: [
               SfCartesianChart(
-                primaryXAxis: DateTimeAxis(),
-                primaryYAxis: NumericAxis(),
-            series: <ChartSeries<ChartData, DateTime>>[
-              LineSeries<ChartData, DateTime>(
-                  dataSource: chartData,
-                  xValueMapper: (ChartData data, _) => data.x,
-                  yValueMapper: (ChartData data, _) => data.y),
-            ]
-              ),
-
-
+                  primaryXAxis: DateTimeAxis(),
+                  primaryYAxis: NumericAxis(),
+                  series: <ChartSeries<ChartData, DateTime>>[
+                    LineSeries<ChartData, DateTime>(
+                        dataSource: chartData,
+                        xValueMapper: (ChartData data, _) => data.x,
+                        yValueMapper: (ChartData data, _) => data.y),
+                  ]),
             ],
           ),
         );
@@ -86,3 +84,5 @@ class _StocksScreenState extends State<StocksScreen> {
     );
   }
 }
+
+
