@@ -11,8 +11,8 @@ setData()async{
 
   uid = prefs.getString('uid');
 
-  final db = FirebaseFirestore.instance;
-  final data = db.collection('users').doc('$uid').get();
+  // final db = FirebaseFirestore.instance;
+  // final data = db.collection('users').doc('$uid').get();
 
 }
 // getUserDetails() async {
