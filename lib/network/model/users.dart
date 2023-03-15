@@ -13,12 +13,12 @@ setData()async{
 
 }
 
-buyStocks(String stockName) async {
+buyStocks(String stockName, int amount, int price) async {
   var data = await FirebaseFirestore.instance.collection('company').doc(stockName).get();
   int initialStockAmount = data.data()!['stock'];
   if(initialStockAmount != 0){
-    int stockAmount = 0;
-    int stockPrice = 0;
+    int stockAmount = amount;
+    int stockPrice = price;
     int totalAmount = stockPrice * stockAmount;
     int newStockAmount = initialStockAmount - stockAmount;
     if(initialStockAmount > newStockAmount){
@@ -38,11 +38,11 @@ buyStocks(String stockName) async {
   }
 }
 
-sellStocks(String stockName) async {
+sellStocks(String stockName, int amount, int price) async {
   var data = await FirebaseFirestore.instance.collection('company').doc(stockName).get();
   int initialStockAmount = data.data()!['stock'];
-  int stockAmount = 0;
-  int stockPrice = 0;
+  int stockAmount = amount;
+  int stockPrice = price;
   int totalAmount = stockPrice * stockAmount;
   int newStockAmount = initialStockAmount + stockAmount;
   if(totalAmount != 0){
