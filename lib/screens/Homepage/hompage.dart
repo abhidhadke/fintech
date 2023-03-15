@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintech/constants.dart';
-import 'package:fintech/network/model/users.dart' as cUser;
+import 'package:fintech/network/model/users.dart' as user;
 import 'package:flutter/material.dart';
 import 'components/HomeCard.dart';
 import 'components/stock_card.dart';
@@ -23,11 +23,11 @@ class _HomepageState extends State<Homepage> {
   }
 
   getUserDetails() async {
-    await cUser.setData();
+    await user.setData();
     final db = FirebaseFirestore.instance;
-    final data = await db.collection('users').doc(cUser.uid).get();
-    cUser.UserName = data.data()!['username'];
-    cUser.UserTokens = data.data()!['tokens'].toString();
+    final data = await db.collection('users').doc(user.uid).get();
+    user.userName = data.data()!['username'];
+    user.userTokens = data.data()!['tokens'];
     setState(() {});
     //debugPrint(UserTokens);
   }
@@ -51,7 +51,7 @@ class _HomepageState extends State<Homepage> {
                       SizedBox(
                         width: constraint.maxWidth * 0.4,
                         child: Text(
-                          'Welcome, \n ${cUser.UserName} !',
+                          'Welcome, \n ${user.userName} !',
                           style: TextStyle(
                             fontSize: constraint.maxWidth * 0.06,
                             color: secondary,
@@ -71,7 +71,7 @@ class _HomepageState extends State<Homepage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              '${cUser.UserTokens} fs',
+                              '${user.userTokens} fs',
                               style: TextStyle(
                                 fontSize: constraint.maxWidth * 0.075,
                                 fontWeight: FontWeight.w600,
@@ -176,6 +176,7 @@ class _HomepageState extends State<Homepage> {
                                   );
                                 }
                                 return ListView.builder(
+                                  physics: const BouncingScrollPhysics(),
                                     scrollDirection: Axis.vertical,
                                     itemCount: userData.length,
                                     padding: const EdgeInsets.only(right: 5),

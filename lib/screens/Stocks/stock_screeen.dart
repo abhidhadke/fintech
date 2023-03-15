@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+
 import '../../constants.dart';
+
 import 'components/chartData.dart';
 
 class StocksScreen extends StatefulWidget {
@@ -190,3 +192,5 @@ class _StocksScreenState extends State<StocksScreen>
     );
   }
 }
+
+
