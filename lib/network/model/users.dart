@@ -4,5 +4,5 @@ String userName = '';
 
 userData(String uid) async {
   final userId = FirebaseFirestore.instance.collection('users').doc(uid);
-
 }
+

@@ -27,127 +27,117 @@ class _LoginScreenState extends State<LoginScreen> {
     return LayoutBuilder(builder: (context, constraints) {
       return Scaffold(
         backgroundColor: bgSecondary,
-        body: SafeArea(
+        body: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Expanded(
-                flex: 2,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: constraints.maxHeight * 0.25,
-                      child: Image.asset('assets/logo.png'),
-                    ),
-                    SizedBox(height: constraints.maxHeight * 0.02,),
-                    Formfield(
-                      size: constraints,
-                      text: 'email',
-                      isPassword: false,
-                      onChanged: (String val) {
-                        email = val;
-                      },
-                      isFilled: emailFill,
-                    ),
-                    Formfield(
-                      size: constraints,
-                      text: 'password',
-                      isPassword: true,
-                      onChanged: (String val) {
-                        password = val;
-                      },
-                      isFilled: passFill,
-                    ),
-                    SizedBox(height: constraints.maxHeight * 0.02,),
-                    ElevatedButtonTheme(
-                      data: ElevatedButtonThemeData(
-                        style: ButtonStyle(
-                          textStyle: MaterialStateProperty.all(GoogleFonts.poppins(
-                            fontSize: constraints.maxWidth * 0.07,
-                            fontWeight: FontWeight.w600
-                          )),
-                          padding: MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 8)),
-                          elevation: MaterialStateProperty.all(10),
-                          shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                          )),
-                          fixedSize: MaterialStateProperty.all(
-                            Size(constraints.maxWidth * 0.7, constraints.maxHeight * 0.07)
-                          ),
-
-                        )
-                      ),
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          //await _pushtoNextScreen();
-                          debugPrint('tapped');
-                          if(email == ''){
-                            if(password == ''){
-                              setState(() {
-                                emailFill = false;
-                                passFill = false;
-                              });
-                            }else{
-                              setState(() {
-                                emailFill = false;
-                              });
-                            }
-                          }
-                          else if(password == ''){
-                            if(email == ''){
-                              setState(() {
-                                emailFill = false;
-                                passFill = false;
-                              });
-                            }else{
-                              setState(() {
-                                passFill = false;
-                              });
-                            }
-                          }
-                          else{
-                            setState(() {
-                              isLoading = true;
-                              passFill = true;
-                              emailFill = true;
-                            });
-
-                            // firebase login code goes here
-                            try{
-                              final user = await _auth.signInWithEmailAndPassword(email: email, password: password);
-                              final userData = user.user;
-                              if(userData != null){
-                                final prefs = await SharedPreferences.getInstance();
-                                await prefs.setBool('login', true);
-                                uid = userData.uid;
-                                await prefs.setString('uid', uid);
-                                debugPrint(uid);
-                                await _pushtoNextScreen();
-                              }
-                              else{
-                                setState(() {
-                                  isLoading = false;
-                                });
-                              }
-                            }
-                            catch(e){
-                              debugPrint('$e');
-                              setState(() {
-                                isLoading = false;
-                              });
-                            }
-                            //end of code
-                          }
-
-                        },
-                        child: isLoading ? const CircularProgressIndicator() : Text('Login', style: GoogleFonts.poppins(),),
-                      ),
+              SizedBox(height: constraints.maxHeight*0.1,),
+              Image.asset('assets/logo.png'),
+              SizedBox(height: constraints.maxHeight * 0.1,),
+              Formfield(
+                size: constraints,
+                text: 'email',
+                isPassword: false,
+                onChanged: (String val) {
+                  email = val;
+                },
+                isFilled: emailFill,
+              ),
+              Formfield(
+                size: constraints,
+                text: 'password',
+                isPassword: true,
+                onChanged: (String val) {
+                  password = val;
+                },
+                isFilled: passFill,
+              ),
+              SizedBox(height: constraints.maxHeight * 0.05,),
+              ElevatedButtonTheme(
+                data: ElevatedButtonThemeData(
+                  style: ButtonStyle(
+                    textStyle: MaterialStateProperty.all(GoogleFonts.poppins(
+                      fontSize: constraints.maxWidth * 0.07,
+                      fontWeight: FontWeight.w600
+                    )),
+                    padding: MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 8)),
+                    elevation: MaterialStateProperty.all(10),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    )),
+                    fixedSize: MaterialStateProperty.all(
+                      Size(constraints.maxWidth * 0.7, constraints.maxHeight * 0.07)
                     ),
 
-                  ],
+                  )
+                ),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    //await _pushtoNextScreen();
+                    debugPrint('tapped');
+                    if(email == ''){
+                      if(password == ''){
+                        setState(() {
+                          emailFill = false;
+                          passFill = false;
+                        });
+                      }else{
+                        setState(() {
+                          emailFill = false;
+                        });
+                      }
+                    }
+                    else if(password == ''){
+                      if(email == ''){
+                        setState(() {
+                          emailFill = false;
+                          passFill = false;
+                        });
+                      }else{
+                        setState(() {
+                          passFill = false;
+                        });
+                      }
+                    }
+                    else{
+                      setState(() {
+                        isLoading = true;
+                        passFill = true;
+                        emailFill = true;
+                      });
+
+                      // firebase login code goes here
+                      try{
+                        final user = await _auth.signInWithEmailAndPassword(email: email, password: password);
+                        final userData = user.user;
+                        if(userData != null){
+                          final prefs = await SharedPreferences.getInstance();
+                          await prefs.setBool('login', true);
+                          uid = userData.uid;
+                          await prefs.setString('uid', uid);
+                          debugPrint(uid);
+                          await _pushtoNextScreen();
+                        }
+                        else{
+                          setState(() {
+                            isLoading = false;
+                          });
+                        }
+                      }
+                      catch(e){
+                        debugPrint('$e');
+                        setState(() {
+                          isLoading = false;
+                        });
+                      }
+                      //end of code
+                    }
+
+                  },
+                  child: isLoading ? const CircularProgressIndicator() : Text('Login', style: GoogleFonts.poppins(),),
                 ),
               ),
+              SizedBox(height: constraints.maxHeight*0.1,),
             ],
           ),
         ),

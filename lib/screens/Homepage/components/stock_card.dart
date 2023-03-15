@@ -6,6 +6,7 @@ class StocksCard extends StatelessWidget {
   final String stockName;
   final String stockLogo;
   final double stockPrice;
+  final double stockChange;
 
   const StocksCard({
     super.key,
@@ -13,6 +14,7 @@ class StocksCard extends StatelessWidget {
     required this.stockName,
     required this.stockLogo,
     required this.stockPrice,
+    required this.stockChange,
   });
 
   @override
@@ -23,7 +25,12 @@ class StocksCard extends StatelessWidget {
         elevation: 4,
         child: ListTile(
           contentPadding: const EdgeInsets.all(10),
-          title: Text(stockName, style: GoogleFonts.poppins(fontSize: constraint.maxWidth * 0.045, fontWeight: FontWeight.w600),),
+          title: Text(
+            stockName,
+            style: GoogleFonts.poppins(
+                fontSize: constraint.maxWidth * 0.045,
+                fontWeight: FontWeight.w600),
+          ),
           leading: SizedBox(
               width: constraint.maxWidth * 0.09,
               height: constraint.maxHeight * 0.08,
@@ -31,8 +38,13 @@ class StocksCard extends StatelessWidget {
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('fs $stockPrice', style: GoogleFonts.poppins(fontSize: constraint.maxWidth * 0.035, fontWeight: FontWeight.w500),),
-              _arrowSign(stockPrice),
+              // Text(
+              //   'fs $stockPrice',
+              //   style: GoogleFonts.poppins(
+              //       fontSize: constraint.maxWidth * 0.035,
+              //       fontWeight: FontWeight.w500),
+              // ),
+              _arrowSign(stockChange),
             ],
           ),
         ),
@@ -40,16 +52,26 @@ class StocksCard extends StatelessWidget {
     );
   }
 
-  _arrowSign(double price) {
-    if (price >= 0) {
-      return const Icon(
-        Icons.arrow_drop_up,
-        color: Colors.green,
+  _arrowSign(double stockChange) {
+    if (stockChange >= 0) {
+      return Column(
+        children: [
+          const Icon(
+            Icons.arrow_drop_up,
+            color: Colors.green,
+          ),
+          Text(stockChange.toString() + '%'),
+        ],
       );
     } else {
-      return const Icon(
-        Icons.arrow_drop_down,
-        color: Colors.red,
+      return Column(
+        children: [
+          const Icon(
+            Icons.arrow_drop_down,
+            color: Colors.red,
+          ),
+          Text(stockChange.toString() + '%', ),
+        ],
       );
     }
   }

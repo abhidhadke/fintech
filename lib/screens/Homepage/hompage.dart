@@ -7,6 +7,7 @@ import 'components/stock_card.dart';
 
 class Homepage extends StatefulWidget {
   final String uid;
+
   const Homepage({Key? key, required this.uid}) : super(key: key);
 
   @override
@@ -14,7 +15,6 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-
   @override
   void initState() {
     // TODO: implement initState
@@ -146,7 +146,6 @@ class _HomepageState extends State<Homepage> {
                                 QuerySnapshot<Map<String, dynamic>>>(
                               stream: FirebaseFirestore.instance
                                   .collection('company')
-                                  .orderBy('name', descending: true)
                                   .snapshots(),
                               builder: (context, snapshot) {
                                 if (!snapshot.hasData) {
@@ -172,11 +171,13 @@ class _HomepageState extends State<Homepage> {
                                     padding: const EdgeInsets.only(right: 5),
                                     itemBuilder: (context, index) {
                                       return StocksCard(
-                                          constraint: constraint,
-                                          stockName: userData[index]['name'],
-                                          stockLogo: userData[index]['link'],
-                                          stockPrice: userData[index]['price']
-                                              .toDouble());
+                                        constraint: constraint,
+                                        stockName: userData[index]['name'],
+                                        stockLogo: userData[index]['link'],
+                                        stockPrice:
+                                            userData[index]['price'].toDouble(),
+                                        stockChange: 1,
+                                      );
                                     });
                               },
                             ),
