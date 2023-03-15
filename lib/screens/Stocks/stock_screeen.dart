@@ -31,6 +31,7 @@ class _StocksScreenState extends State<StocksScreen>
   void initState() {
     // TODO: implement initState
     getDataFromFireStore();
+    super.initState();
     _controller =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
     _animation = Tween(end: 1.0, begin: 0.0).animate(_controller)
@@ -40,7 +41,6 @@ class _StocksScreenState extends State<StocksScreen>
       ..addStatusListener((status) {
         _status = status;
       });
-    super.initState();
   }
 
   Future<void> getDataFromFireStore() async {
@@ -63,35 +63,12 @@ class _StocksScreenState extends State<StocksScreen>
     });
   }
 
+  void _show(BuildContext ctx, int cnt) {}
 
-  void _show(BuildContext ctx, int cnt) {
-    showModalBottomSheet(
-        elevation: 10,
-        backgroundColor: Colors.amber,
-        context: ctx,
-        builder: (ctx) => Container(
-            width: 300,
-            height: 250,
-            color: Colors.white54,
-            alignment: Alignment.center,
-            child: CounterCard(
-              count: cnt,
-              increment: () {
-                setState(() {
-                  cnt++;
-                });
-              },
-              decrement: () {
-                setState(() {
-                  cnt--;
-                });
-              },
-            )));
-  }
+  int cnt = 0;
 
   @override
   Widget build(BuildContext context) {
-    int cnt =0;
     debugPrint('inside stock: ${widget.stockName}');
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -178,7 +155,30 @@ class _StocksScreenState extends State<StocksScreen>
               ),
               RoundedButton(
                 text: 'BUY',
-                press: () => _show(context, cnt),
+                press: () {
+                  showModalBottomSheet(
+                      elevation: 10,
+                      backgroundColor: Colors.amber,
+                      context: context,
+                      builder: (ctx) => Container(
+                          width: 300,
+                          height: 250,
+                          color: Colors.white54,
+                          alignment: Alignment.center,
+                          child: CounterCard(
+                            count: cnt,
+                            increment: () {
+                              setState(() {
+                                cnt++;
+                              });
+                            },
+                            decrement: () {
+                              setState(() {
+                                cnt--;
+                              });
+                            },
+                          )));
+                },
                 color: bgPrimary,
                 textColor: btnColor,
                 length: 0.85,
