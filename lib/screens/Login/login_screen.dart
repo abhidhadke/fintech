@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintech/constants.dart';
 import 'package:fintech/screens/Homepage/hompage.dart';
 import 'package:fintech/screens/News/News_page.dart';
@@ -6,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'components/textfield.dart';
+import '../../network/model/users.dart' as cUser;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -21,6 +23,8 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isLoading = false;
   final _auth = FirebaseAuth.instance;
   String uid = '';
+
+  dynamic usser;
 
   @override
   Widget build(BuildContext context) {
@@ -113,8 +117,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         if(userData != null){
                           final prefs = await SharedPreferences.getInstance();
                           await prefs.setBool('login', true);
+                          cUser.uid = userData.uid;
                           uid = userData.uid;
                           await prefs.setString('uid', uid);
+                          //debugPrint('$Uname');
                           debugPrint(uid);
                           await _pushtoNextScreen();
                         }

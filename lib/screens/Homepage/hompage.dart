@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintech/constants.dart';
-import 'package:fintech/network/model/users.dart';
+import 'package:fintech/network/model/users.dart' as cUser;
 import 'package:flutter/material.dart';
 import 'components/HomeCard.dart';
 import 'components/stock_card.dart';
@@ -18,8 +18,17 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     // TODO: implement initState
-    userData(widget.uid);
+    getUserDetails();
     super.initState();
+  }
+
+  getUserDetails() async {
+    final db = FirebaseFirestore.instance;
+    final data = await db.collection('users').doc(cUser.uid).get();
+    cUser.UserName = data.data()!['username'];
+    cUser.UserTokens = data.data()!['tokens'].toString();
+    setState(() {});
+    //debugPrint(UserTokens);
   }
 
   @override
@@ -41,7 +50,7 @@ class _HomepageState extends State<Homepage> {
                       SizedBox(
                         width: constraint.maxWidth * 0.4,
                         child: Text(
-                          'Welcome, \nUsername !',
+                          'Welcome, \n ${cUser.UserName} !',
                           style: TextStyle(
                             fontSize: constraint.maxWidth * 0.06,
                             color: secondary,
@@ -61,7 +70,7 @@ class _HomepageState extends State<Homepage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              '20000 fs',
+                              '${cUser.UserTokens} fs',
                               style: TextStyle(
                                 fontSize: constraint.maxWidth * 0.075,
                                 fontWeight: FontWeight.w600,
@@ -176,7 +185,8 @@ class _HomepageState extends State<Homepage> {
                                         stockLogo: userData[index]['link'],
                                         stockPrice:
                                             userData[index]['price'].toDouble(),
-                                        stockChange: 1,
+                                        stockChange: userData[index]['incdec']
+                                            .toDouble(),
                                       );
                                     });
                               },
