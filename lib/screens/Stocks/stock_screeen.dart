@@ -161,34 +161,33 @@ class _StocksScreenState extends State<StocksScreen>
                       backgroundColor: Colors.amber,
                       context: context,
                       builder: (ctx) => StatefulBuilder(
-                       builder:  (context, StateSetter setState){
-                         return  Container(
-                             width: 300,
-                             height: 250,
-                             color: Colors.white54,
-                             alignment: Alignment.center,
-                             child: Row(
-                               children: [
-                                 CounterCard(
-                                   count: cnt,
-                                   increment: () {
-                                     setState(() {
-                                       cnt++;
-                                     });
-                                   },
-                                   decrement: () {
-                                     if(cnt > 0){
-                                       setState(() {
-                                         cnt--;
-                                       });
-                                     }
-
-                                   },
-                                 ),
-                               ],
-                             ));
-                       },
-                      ));
+                            builder: (context, StateSetter setState) {
+                              return Container(
+                                  width: 300,
+                                  height: 250,
+                                  color: Colors.white54,
+                                  alignment: Alignment.center,
+                                  child: Row(
+                                    children: [
+                                      CounterCard(
+                                        count: cnt,
+                                        increment: () {
+                                          setState(() {
+                                            cnt++;
+                                          });
+                                        },
+                                        decrement: () {
+                                          if (cnt > 0) {
+                                            setState(() {
+                                              cnt--;
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  ));
+                            },
+                          ));
                 },
                 color: bgPrimary,
                 textColor: btnColor,
