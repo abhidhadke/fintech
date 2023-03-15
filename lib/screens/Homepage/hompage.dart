@@ -23,6 +23,7 @@ class _HomepageState extends State<Homepage> {
   }
 
   getUserDetails() async {
+    await cUser.setData();
     final db = FirebaseFirestore.instance;
     final data = await db.collection('users').doc(cUser.uid).get();
     cUser.UserName = data.data()!['username'];

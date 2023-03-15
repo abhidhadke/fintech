@@ -117,7 +117,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         if(userData != null){
                           final prefs = await SharedPreferences.getInstance();
                           await prefs.setBool('login', true);
-                          cUser.uid = userData.uid;
                           uid = userData.uid;
                           await prefs.setString('uid', uid);
                           //debugPrint('$Uname');
