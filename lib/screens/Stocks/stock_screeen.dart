@@ -76,7 +76,7 @@ class _StocksScreenState extends State<StocksScreen>
           appBar: _appBar(constraints),
           body: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               SfCartesianChart(
@@ -88,7 +88,7 @@ class _StocksScreenState extends State<StocksScreen>
                         xValueMapper: (ChartData data, _) => data.x,
                         yValueMapper: (ChartData data, _) => data.y),
                   ]),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Transform(
@@ -97,7 +97,7 @@ class _StocksScreenState extends State<StocksScreen>
                   ..setEntry(3, 2, 0.0015)
                   ..rotateX(pi * _animation.value),
                 child: Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(20.0))),
                   child: _animation.value <= 0.5
                       ? InkWell(
@@ -105,7 +105,7 @@ class _StocksScreenState extends State<StocksScreen>
                             _controller.forward();
                           },
                           child: Container(
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(20.0)),
                                 color: Colors.deepOrange,
@@ -124,7 +124,7 @@ class _StocksScreenState extends State<StocksScreen>
                             _controller.reverse();
                           },
                           child: Container(
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(20.0)),
                                 color: Colors.deepOrange,
@@ -135,7 +135,7 @@ class _StocksScreenState extends State<StocksScreen>
                               child: Transform(
                                 alignment: Alignment.center,
                                 transform: Matrix4.rotationY(pi),
-                                child: RotatedBox(
+                                child: const RotatedBox(
                                   quarterTurns: 2,
                                   child: Center(
                                     child: Text(
@@ -150,7 +150,7 @@ class _StocksScreenState extends State<StocksScreen>
                         ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               RoundedButton(
@@ -160,30 +160,41 @@ class _StocksScreenState extends State<StocksScreen>
                       elevation: 10,
                       backgroundColor: Colors.amber,
                       context: context,
-                      builder: (ctx) => Container(
-                          width: 300,
-                          height: 250,
-                          color: Colors.white54,
-                          alignment: Alignment.center,
-                          child: CounterCard(
-                            count: cnt,
-                            increment: () {
-                              setState(() {
-                                cnt++;
-                              });
-                            },
-                            decrement: () {
-                              setState(() {
-                                cnt--;
-                              });
-                            },
-                          )));
+                      builder: (ctx) => StatefulBuilder(
+                       builder:  (context, StateSetter setState){
+                         return  Container(
+                             width: 300,
+                             height: 250,
+                             color: Colors.white54,
+                             alignment: Alignment.center,
+                             child: Row(
+                               children: [
+                                 CounterCard(
+                                   count: cnt,
+                                   increment: () {
+                                     setState(() {
+                                       cnt++;
+                                     });
+                                   },
+                                   decrement: () {
+                                     if(cnt > 0){
+                                       setState(() {
+                                         cnt--;
+                                       });
+                                     }
+
+                                   },
+                                 ),
+                               ],
+                             ));
+                       },
+                      ));
                 },
                 color: bgPrimary,
                 textColor: btnColor,
                 length: 0.85,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               RoundedButton(
