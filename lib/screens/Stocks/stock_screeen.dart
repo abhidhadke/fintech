@@ -73,6 +73,7 @@ class _StocksScreenState extends State<StocksScreen>
     return LayoutBuilder(
       builder: (context, constraints) {
         return Scaffold(
+          backgroundColor: bgSecondary,
           appBar: _appBar(constraints),
           body: Column(
             children: [
@@ -82,11 +83,15 @@ class _StocksScreenState extends State<StocksScreen>
               SfCartesianChart(
                   primaryXAxis: DateTimeAxis(),
                   primaryYAxis: NumericAxis(),
+                  enableAxisAnimation: true,
                   series: <ChartSeries<ChartData, DateTime>>[
                     LineSeries<ChartData, DateTime>(
                         dataSource: chartData,
                         xValueMapper: (ChartData data, _) => data.x,
-                        yValueMapper: (ChartData data, _) => data.y),
+                        yValueMapper: (ChartData data, _) => data.y,
+                        xAxisName: 'Time',
+                        yAxisName: 'Price',
+                        width: 4.0),
                   ]),
               const SizedBox(
                 height: 30,
@@ -161,34 +166,33 @@ class _StocksScreenState extends State<StocksScreen>
                       backgroundColor: Colors.amber,
                       context: context,
                       builder: (ctx) => StatefulBuilder(
-                       builder:  (context, StateSetter setState){
-                         return  Container(
-                             width: 300,
-                             height: 250,
-                             color: Colors.white54,
-                             alignment: Alignment.center,
-                             child: Row(
-                               children: [
-                                 CounterCard(
-                                   count: cnt,
-                                   increment: () {
-                                     setState(() {
-                                       cnt++;
-                                     });
-                                   },
-                                   decrement: () {
-                                     if(cnt > 0){
-                                       setState(() {
-                                         cnt--;
-                                       });
-                                     }
-
-                                   },
-                                 ),
-                               ],
-                             ));
-                       },
-                      ));
+                            builder: (context, StateSetter setState) {
+                              return Container(
+                                  width: 300,
+                                  height: 250,
+                                  color: Colors.white54,
+                                  alignment: Alignment.center,
+                                  child: Row(
+                                    children: [
+                                      CounterCard(
+                                        count: cnt,
+                                        increment: () {
+                                          setState(() {
+                                            cnt++;
+                                          });
+                                        },
+                                        decrement: () {
+                                          if (cnt > 0) {
+                                            setState(() {
+                                              cnt--;
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  ));
+                            },
+                          ));
                 },
                 color: bgPrimary,
                 textColor: btnColor,
@@ -213,17 +217,21 @@ class _StocksScreenState extends State<StocksScreen>
 
   _appBar(BoxConstraints constraints) {
     return AppBar(
+      backgroundColor: bgSecondary,
       leading: IconButton(
         onPressed: () async {
           Navigator.pop(context);
         },
-        icon: const Icon(Icons.arrow_back_ios_rounded),
+        icon: const Icon(
+          Icons.arrow_back_ios_rounded,
+          color: secondary,
+        ),
       ),
       title: Text(widget.stockName),
       titleTextStyle: GoogleFonts.poppins(
           fontSize: constraints.maxWidth * 0.06,
-          color: Colors.black,
-          fontWeight: FontWeight.w700),
+          color: secondary,
+          fontWeight: FontWeight.w600),
     );
   }
 }
