@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-
 import '../../constants.dart';
 
 import 'components/chartData.dart';
@@ -64,10 +63,35 @@ class _StocksScreenState extends State<StocksScreen>
     });
   }
 
-  int cnt = 0;
+
+  void _show(BuildContext ctx, int cnt) {
+    showModalBottomSheet(
+        elevation: 10,
+        backgroundColor: Colors.amber,
+        context: ctx,
+        builder: (ctx) => Container(
+            width: 300,
+            height: 250,
+            color: Colors.white54,
+            alignment: Alignment.center,
+            child: CounterCard(
+              count: cnt,
+              increment: () {
+                setState(() {
+                  cnt++;
+                });
+              },
+              decrement: () {
+                setState(() {
+                  cnt--;
+                });
+              },
+            )));
+  }
 
   @override
   Widget build(BuildContext context) {
+    int cnt =0;
     debugPrint('inside stock: ${widget.stockName}');
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -97,8 +121,7 @@ class _StocksScreenState extends State<StocksScreen>
                   ..rotateX(pi * _animation.value),
                 child: Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0))
-                  ),
+                      borderRadius: BorderRadius.all(Radius.circular(20.0))),
                   child: _animation.value <= 0.5
                       ? InkWell(
                           onTap: () {
@@ -106,13 +129,13 @@ class _StocksScreenState extends State<StocksScreen>
                           },
                           child: Container(
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0)),
                                 color: Colors.deepOrange,
                               ),
-
                               width: constraints.maxWidth * 0.85,
                               height: 100,
-                              child:  const Center(
+                              child: const Center(
                                   child: Text(
                                 'Your Info',
                                 style: TextStyle(
@@ -125,7 +148,8 @@ class _StocksScreenState extends State<StocksScreen>
                           },
                           child: Container(
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0)),
                                 color: Colors.deepOrange,
                               ),
                               width: constraints.maxWidth * 0.85,
@@ -141,7 +165,7 @@ class _StocksScreenState extends State<StocksScreen>
                                       'You own xxx amount of yyy stock amounting to zzz fs',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                      fontSize: 20, color: Colors.white),
+                                          fontSize: 20, color: Colors.white),
                                     ),
                                   ),
                                 ),
@@ -154,7 +178,7 @@ class _StocksScreenState extends State<StocksScreen>
               ),
               RoundedButton(
                 text: 'BUY',
-                press: () {},
+                press: () => _show(context, cnt),
                 color: bgPrimary,
                 textColor: btnColor,
                 length: 0.85,
@@ -192,5 +216,3 @@ class _StocksScreenState extends State<StocksScreen>
     );
   }
 }
-
-
