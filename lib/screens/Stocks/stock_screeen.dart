@@ -44,15 +44,20 @@ class _StocksScreenState extends State<StocksScreen>
   }
 
   Future<void> getDataFromFireStore() async {
-    List<ChartData> list = [];
-    var snapShotsValue = await FirebaseFirestore.instance
+    
+    debugPrint(widget.stockName);
+    await FirebaseFirestore.instance
         .collection("history")
         .doc(widget.stockName)
-        .get();
-
-    var docData = snapShotsValue.data();
+        .get().then((value) => storeData(value));
+  }
+  storeData(DocumentSnapshot<Map<String, dynamic>> value ){
+    List<ChartData> list = [];
+    debugPrint('${value.exists}');
+    var docData = value.data();
+    debugPrint('${docData?.length}');
     int docLen = docData?.keys.length ?? 0;
-    for (int i = 1; i <= (docLen / 2); i++) {
+    for (int i = 1; i <= docLen ~/ 2; i++) {
       list.add(ChartData(
           x: docData!['time$i'].toDate(), y: docData['price$i'].toDouble()));
     }
@@ -63,7 +68,6 @@ class _StocksScreenState extends State<StocksScreen>
     });
   }
 
-  void _show(BuildContext ctx, int cnt) {}
 
   int cnt = 0;
 
