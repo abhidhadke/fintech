@@ -44,14 +44,15 @@ class _StocksScreenState extends State<StocksScreen>
   }
 
   Future<void> getDataFromFireStore() async {
-    
     debugPrint(widget.stockName);
     await FirebaseFirestore.instance
         .collection("history")
         .doc(widget.stockName)
-        .get().then((value) => storeData(value));
+        .get()
+        .then((value) => storeData(value));
   }
-  storeData(DocumentSnapshot<Map<String, dynamic>> value ){
+
+  storeData(DocumentSnapshot<Map<String, dynamic>> value) {
     List<ChartData> list = [];
     debugPrint('${value.exists}');
     var docData = value.data();
@@ -68,12 +69,11 @@ class _StocksScreenState extends State<StocksScreen>
     });
   }
 
-
   int cnt = 0;
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('inside stock: ${widget.stockName}');
+    debugPrint('inside stock:${widget.stockName}');
     return LayoutBuilder(
       builder: (context, constraints) {
         return Scaffold(
@@ -85,8 +85,12 @@ class _StocksScreenState extends State<StocksScreen>
                 height: 20,
               ),
               SfCartesianChart(
-                  primaryXAxis: DateTimeAxis(),
-                  primaryYAxis: NumericAxis(),
+                  primaryXAxis: DateTimeAxis(
+                      title: AxisTitle(
+                          text: 'Time', alignment: ChartAlignment.near)),
+                  primaryYAxis: NumericAxis(
+                      title: AxisTitle(
+                          text: 'Price', alignment: ChartAlignment.near)),
                   enableAxisAnimation: true,
                   series: <ChartSeries<ChartData, DateTime>>[
                     LineSeries<ChartData, DateTime>(
