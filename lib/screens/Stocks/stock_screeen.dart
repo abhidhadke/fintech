@@ -63,8 +63,6 @@ class _StocksScreenState extends State<StocksScreen>
     });
   }
 
-  void _show(BuildContext ctx, int cnt) {}
-
   int cnt = 0;
 
   @override
@@ -172,7 +170,7 @@ class _StocksScreenState extends State<StocksScreen>
                                   height: 250,
                                   color: Colors.white54,
                                   alignment: Alignment.center,
-                                  child: Row(
+                                  child: Column(
                                     children: [
                                       CounterCard(
                                         count: cnt,
@@ -189,7 +187,12 @@ class _StocksScreenState extends State<StocksScreen>
                                           }
                                         },
                                       ),
-                                    ],
+                                    ]
+                                        .map((e) => Padding(
+                                              padding: EdgeInsets.all(10.0),
+                                              child: e,
+                                            ))
+                                        .toList(),
                                   ));
                             },
                           ));
