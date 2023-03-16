@@ -44,15 +44,21 @@ class _StocksScreenState extends State<StocksScreen>
   }
 
   Future<void> getDataFromFireStore() async {
-    List<ChartData> list = [];
-    var snapShotsValue = await FirebaseFirestore.instance
+    debugPrint(widget.stockName);
+    await FirebaseFirestore.instance
         .collection("history")
         .doc(widget.stockName)
-        .get();
+        .get()
+        .then((value) => storeData(value));
+  }
 
-    var docData = snapShotsValue.data();
+  storeData(DocumentSnapshot<Map<String, dynamic>> value) {
+    List<ChartData> list = [];
+    debugPrint('${value.exists}');
+    var docData = value.data();
+    debugPrint('${docData?.length}');
     int docLen = docData?.keys.length ?? 0;
-    for (int i = 1; i <= (docLen / 2); i++) {
+    for (int i = 1; i <= docLen ~/ 2; i++) {
       list.add(ChartData(
           x: docData!['time$i'].toDate(), y: docData['price$i'].toDouble()));
     }
@@ -67,7 +73,7 @@ class _StocksScreenState extends State<StocksScreen>
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('inside stock: ${widget.stockName}');
+    debugPrint('inside stock:${widget.stockName}');
     return LayoutBuilder(
       builder: (context, constraints) {
         return Scaffold(
@@ -79,8 +85,12 @@ class _StocksScreenState extends State<StocksScreen>
                 height: 20,
               ),
               SfCartesianChart(
-                  primaryXAxis: DateTimeAxis(),
-                  primaryYAxis: NumericAxis(),
+                  primaryXAxis: DateTimeAxis(
+                      title: AxisTitle(
+                          text: 'Time', alignment: ChartAlignment.near)),
+                  primaryYAxis: NumericAxis(
+                      title: AxisTitle(
+                          text: 'Price', alignment: ChartAlignment.near)),
                   enableAxisAnimation: true,
                   series: <ChartSeries<ChartData, DateTime>>[
                     LineSeries<ChartData, DateTime>(
