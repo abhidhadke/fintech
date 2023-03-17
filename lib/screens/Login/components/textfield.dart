@@ -37,12 +37,16 @@ class Formfield extends StatelessWidget {
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
                 borderSide: BorderSide(
-                    color: isFilled ? secondary : Colors.redAccent, width: 2, style: BorderStyle.solid),
+                    color: isFilled ? secondary : Colors.redAccent,
+                    width: 2,
+                    style: BorderStyle.solid),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
                 borderSide: BorderSide(
-                    color: isFilled ? secondary : Colors.redAccent, width: 2, style: BorderStyle.solid),
+                    color: isFilled ? secondary : Colors.redAccent,
+                    width: 2,
+                    style: BorderStyle.solid),
               ),
               hintText: text,
               hintStyle: TextStyle(
@@ -54,17 +58,16 @@ class Formfield extends StatelessWidget {
               ),
             ),
           ),
-          Visibility(
-            visible: !isFilled,
-              child: Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
-            child: Text(
-              '* Required field',
-              style: GoogleFonts.poppins(
-                  color: Colors.redAccent,
-                  fontStyle: FontStyle.italic),
-            ),
-          ))
+           Visibility(
+                  visible: !isFilled,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
+                    child: Text(
+                      '* Required field',
+                      style: GoogleFonts.poppins(
+                          color: Colors.redAccent, fontStyle: FontStyle.italic),
+                    ),
+                  ))
         ],
       ),
     );

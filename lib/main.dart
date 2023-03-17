@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: isLoggedIn ?  Homepage(uid: uid,) : const LoginScreen(),
+       home: isLoggedIn ?  Homepage(uid: uid,) : const LoginScreen(),
      // home: const LoginScreen(),
     );
   }

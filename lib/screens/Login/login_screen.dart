@@ -18,6 +18,8 @@ class _LoginScreenState extends State<LoginScreen> {
   bool passFill = true;
   bool emailFill = true;
   bool isLoading = false;
+  bool wrongPass = false;
+  String errorMsg = '';
   final _auth = FirebaseAuth.instance;
 
 
@@ -55,6 +57,29 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
                 isFilled: passFill,
               ),
+              Visibility(
+                visible: wrongPass,
+                child: SizedBox(
+                  width: constraints.maxWidth,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: constraints.maxHeight * 0.01,
+                      ),
+                      Text(errorMsg, style: GoogleFonts.poppins(
+                          color: Colors.redAccent, fontStyle: FontStyle.italic),)
+                    ].map((e) => Padding(
+                      padding: EdgeInsets.only(left: constraints.maxWidth * 0.09),
+                      child: e,
+                    ))
+                        .toList(),
+                  ),
+                ),
+              ),
+              
               SizedBox(
                 height: constraints.maxHeight * 0.05,
               ),
@@ -124,9 +149,17 @@ class _LoginScreenState extends State<LoginScreen> {
                             isLoading = false;
                           });
                         }
-                      } catch (e) {
+                      } on FirebaseAuthException catch (e) {
                         debugPrint('$e');
+                        if (e.code == 'user-not-found') {
+                          errorMsg = '* No user found for that email';
+                        } else if (e.code == 'wrong-password') {
+                          errorMsg = '* Wrong password provided for that user';
+                        } else if(e.code == 'invalid-email'){
+                          errorMsg = '* The email address is invalid';
+                        }
                         setState(() {
+                          wrongPass = true;
                           isLoading = false;
                         });
                       }
