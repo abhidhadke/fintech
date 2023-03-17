@@ -40,7 +40,7 @@ class CounterCard extends StatelessWidget {
               SizedBox(
                 width: 40,
                 child: Text(
-                  '${count}',
+                  '$count',
                   textAlign: TextAlign.center,
                 ),
               ),

@@ -1,15 +1,12 @@
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintech/network/model/users.dart';
 import 'package:fintech/screens/Stocks/components/RoundedButton.dart';
-import 'package:fintech/screens/Stocks/components/buyCOunter.dart';
+import 'package:fintech/screens/Stocks/components/bottomSheeet.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-
 import '../../constants.dart';
-
 import '../Homepage/hompage.dart';
 import 'components/chartData.dart';
 
@@ -17,7 +14,9 @@ class StocksScreen extends StatefulWidget {
   final String stockName;
   final int stockPrice;
 
-  const StocksScreen({Key? key, required this.stockName, required this.stockPrice}) : super(key: key);
+  const StocksScreen(
+      {Key? key, required this.stockName, required this.stockPrice})
+      : super(key: key);
 
   @override
   State<StocksScreen> createState() => _StocksScreenState();
@@ -28,6 +27,7 @@ class _StocksScreenState extends State<StocksScreen>
   late AnimationController _controller;
   late Animation _animation;
   List<ChartData> chartData = <ChartData>[];
+  int cnt = 0;
 
   @override
   void initState() {
@@ -40,8 +40,7 @@ class _StocksScreenState extends State<StocksScreen>
       ..addListener(() {
         setState(() {});
       })
-      ..addStatusListener((status) {
-      });
+      ..addStatusListener((status) {});
   }
 
   Future<void> getDataFromFireStore() async {
@@ -63,14 +62,11 @@ class _StocksScreenState extends State<StocksScreen>
       list.add(ChartData(
           x: docData!['time$i'].toDate(), y: docData['price$i'].toDouble()));
     }
-
     setState(() {
       //debugPrint('$list');
       chartData = list;
     });
   }
-
-  int cnt = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -170,64 +166,8 @@ class _StocksScreenState extends State<StocksScreen>
               RoundedButton(
                 text: 'BUY',
                 press: () {
-                  showModalBottomSheet(
-                      elevation: 10,
-                      backgroundColor: Colors.amber,
-                      context: context,
-                      builder: (ctx) => StatefulBuilder(
-                            builder: (context, StateSetter setState) {
-                              return Container(
-                                  width: constraints.maxWidth,
-                                  height: constraints.maxHeight*0.3,
-                                  color: Colors.white54,
-                                  alignment: Alignment.center,
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        width: constraints.maxWidth*0.4,
-                                        child: CounterCard(
-                                          count: cnt,
-                                          increment: () {
-                                            setState(() {
-                                              cnt++;
-                                            });
-                                          },
-                                          decrement: () {
-                                            if (cnt > 0) {
-                                              setState(() {
-                                                cnt--;
-                                              });
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                      ClipRRect(
-                                        borderRadius: const BorderRadius.all(Radius.circular(20.0)),
-                                        child: Container(
-                                          //width: length.width,
-                                          color: bgPrimary,
-                                          child: TextButton(
-                                              onPressed:
-                                                  (){buyStocks(widget.stockName, cnt, widget.stockPrice);},
-                                              //buyStocks(widget.stockName, cnt, widget.stockPrice),
-                                              child: const Text(
-                                                'Checkout',
-                                                style: TextStyle(
-                                                  color: secondary,
-                                                  fontSize: 25,
-                                                ),
-                                              )),
-                                        ),
-                                      ),
-                                    ]
-                                        .map((e) => Padding(
-                                              padding: const EdgeInsets.all(10.0),
-                                              child: e,
-                                            ))
-                                        .toList(),
-                                  ));
-                            },
-                          ));
+                  openBottomSheet(context, constraints, cnt, true,
+                      widget.stockName, widget.stockPrice);
                 },
                 color: bgPrimary,
                 textColor: btnColor,
@@ -239,67 +179,8 @@ class _StocksScreenState extends State<StocksScreen>
               RoundedButton(
                 text: 'SELL',
                 press: () {
-                  showModalBottomSheet(
-                      elevation: 10,
-                      backgroundColor: Colors.amber,
-                      context: context,
-                      builder: (ctx) => StatefulBuilder(
-                        builder: (context, StateSetter setState) {
-                          return Container(
-                              width: constraints.maxWidth,
-                              height: constraints.maxHeight*0.3,
-                              color: Colors.white54,
-                              alignment: Alignment.center,
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    width: constraints.maxWidth*0.4,
-                                    child: CounterCard(
-                                      count: cnt,
-                                      increment: () async {
-                                        int maxAmt = await checkCount(widget.stockName);
-                                        if(cnt < maxAmt){
-                                          setState(() {
-                                            cnt++;
-                                          });
-                                        }
-                                      },
-                                      decrement: () {
-                                        if (cnt > 0) {
-                                          setState(() {
-                                            cnt--;
-                                          });
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                  ClipRRect(
-                                    borderRadius: const BorderRadius.all(Radius.circular(20.0)),
-                                    child: Container(
-                                      //width: length.width,
-                                      color: bgPrimary,
-                                      child: TextButton(
-                                          onPressed:
-                                              (){sellStocks(widget.stockName, cnt, widget.stockPrice);},
-                                          //buyStocks(widget.stockName, cnt, widget.stockPrice),
-                                          child: const Text(
-                                            'Checkout',
-                                            style: TextStyle(
-                                              color: secondary,
-                                              fontSize: 25,
-                                            ),
-                                          )),
-                                    ),
-                                  ),
-                                ]
-                                    .map((e) => Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: e,
-                                ))
-                                    .toList(),
-                              ));
-                        },
-                      ));
+                  openBottomSheet(context, constraints, cnt, false,
+                      widget.stockName, widget.stockPrice);
                 },
                 color: bgPrimary,
                 textColor: btnColor,
@@ -317,7 +198,12 @@ class _StocksScreenState extends State<StocksScreen>
       backgroundColor: bgSecondary,
       leading: IconButton(
         onPressed: () async {
-          await Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Homepage(uid: uid!,)));
+          await Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => Homepage(
+                        uid: uid!,
+                      )));
         },
         icon: const Icon(
           Icons.arrow_back_ios_rounded,
