@@ -22,13 +22,14 @@ class Formfield extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextField(
             onChanged: onChanged,
-            style: const TextStyle(
+            style: TextStyle(
+              fontSize: size.maxWidth * 0.04,
               color: secondary,
             ),
             obscureText: isPassword,

@@ -47,54 +47,61 @@ class _HomepageState extends State<Homepage> {
                 ),
                 Padding(
                   padding: EdgeInsets.all(constraint.maxWidth * 0.05),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => PortFolio()));
-                    },
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: constraint.maxWidth * 0.4,
-                          child: Text(
-                            'Welcome, \n ${user.userName} !',
-                            style: TextStyle(
-                              fontSize: constraint.maxWidth * 0.06,
-                              color: secondary,
-                            ),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: constraint.maxWidth * 0.4,
+                        child: Text(
+                          'Welcome, \n ${user.userName} !',
+                          style: TextStyle(
+                            fontSize: constraint.maxWidth * 0.06,
+                            color: secondary,
                           ),
                         ),
-                        const Spacer(),
-                        Container(
-                          decoration: const BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(30.0)),
-                            color: btnColor,
-                          ),
-                          height: constraint.maxHeight * 0.1,
-                          width: constraint.maxWidth * 0.4,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
+                      ),
+                      const Spacer(),
+                      Container(
+                        decoration: const BoxDecoration(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(40.0)),
+                          color: btnColor,
+                        ),
+                        height: constraint.maxHeight * 0.08,
+                        width: constraint.maxWidth * 0.35,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            InkWell(
+                              child: Text(
                                 '${user.userTokens} fs',
                                 style: TextStyle(
                                   fontSize: constraint.maxWidth * 0.075,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
-                            ],
-                          ),
+                              onTap: () async {
+                                await Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) => const PortFolio()));
+                              },
+                            ),
+                          ],
                         ),
-                        Spacer(),
-                        Icon(
+                      ),
+                      const Spacer(),
+                      InkWell(
+                        onTap: () async {
+                          await Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => const PortFolio()));
+                        },
+                        child: const Icon(
                           Icons.arrow_right_rounded,
                           color: secondary,
-                          size: 40,
+                          size: 50,
                         ),
-                      ],
-                    ),
+                      ),
+
+                    ],
                   ),
                 ),
                 Expanded(

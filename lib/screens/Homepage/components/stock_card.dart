@@ -24,7 +24,7 @@ class StocksCard extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: ()async {
-          await Navigator.push(context, MaterialPageRoute(builder: (_)=>StocksScreen(stockName: stockName, stockPrice: stockPrice.ceil(),)));
+          await Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>StocksScreen(stockName: stockName, stockPrice: stockPrice.ceil(),)));
         },
         child: Card(
           elevation: 4,

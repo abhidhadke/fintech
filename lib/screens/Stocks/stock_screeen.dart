@@ -10,6 +10,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../constants.dart';
 
+import '../Homepage/hompage.dart';
 import 'components/chartData.dart';
 
 class StocksScreen extends StatefulWidget {
@@ -315,7 +316,7 @@ class _StocksScreenState extends State<StocksScreen>
       backgroundColor: bgSecondary,
       leading: IconButton(
         onPressed: () async {
-          Navigator.pop(context);
+          await Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Homepage(uid: uid!,)));
         },
         icon: const Icon(
           Icons.arrow_back_ios_rounded,
