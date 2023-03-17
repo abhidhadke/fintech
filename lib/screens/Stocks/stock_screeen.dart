@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fintech/network/model/users.dart';
 import 'package:fintech/screens/Stocks/components/RoundedButton.dart';
 import 'package:fintech/screens/Stocks/components/buyCOunter.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +14,9 @@ import 'components/chartData.dart';
 
 class StocksScreen extends StatefulWidget {
   final String stockName;
+  final int stockPrice;
 
-  const StocksScreen({Key? key, required this.stockName}) : super(key: key);
+  const StocksScreen({Key? key, required this.stockName, required this.stockPrice}) : super(key: key);
 
   @override
   State<StocksScreen> createState() => _StocksScreenState();
@@ -127,7 +129,7 @@ class _StocksScreenState extends State<StocksScreen>
                               height: 100,
                               child: const Center(
                                   child: Text(
-                                'Your Info',
+                                'Your Info\n(Tap Here)',
                                 style: TextStyle(
                                     fontSize: 20, color: Colors.white),
                               ))),
@@ -176,26 +178,47 @@ class _StocksScreenState extends State<StocksScreen>
                       builder: (ctx) => StatefulBuilder(
                             builder: (context, StateSetter setState) {
                               return Container(
-                                  width: 300,
-                                  height: 250,
+                                  width: constraints.maxWidth,
+                                  height: constraints.maxHeight*0.3,
                                   color: Colors.white54,
                                   alignment: Alignment.center,
-                                  child: Column(
+                                  child: Row(
                                     children: [
-                                      CounterCard(
-                                        count: cnt,
-                                        increment: () {
-                                          setState(() {
-                                            cnt++;
-                                          });
-                                        },
-                                        decrement: () {
-                                          if (cnt > 0) {
+                                      SizedBox(
+                                        width: constraints.maxWidth*0.4,
+                                        child: CounterCard(
+                                          count: cnt,
+                                          increment: () {
                                             setState(() {
-                                              cnt--;
+                                              cnt++;
                                             });
-                                          }
-                                        },
+                                          },
+                                          decrement: () {
+                                            if (cnt > 0) {
+                                              setState(() {
+                                                cnt--;
+                                              });
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                                        child: Container(
+                                          //width: length.width,
+                                          color: bgPrimary,
+                                          child: TextButton(
+                                              onPressed:
+                                                  (){buyStocks(widget.stockName, cnt, widget.stockPrice);},
+                                              //buyStocks(widget.stockName, cnt, widget.stockPrice),
+                                              child: Text(
+                                                'Checkout',
+                                                style: TextStyle(
+                                                  color: secondary,
+                                                  fontSize: 25,
+                                                ),
+                                              )),
+                                        ),
                                       ),
                                     ]
                                         .map((e) => Padding(
@@ -216,7 +239,66 @@ class _StocksScreenState extends State<StocksScreen>
               ),
               RoundedButton(
                 text: 'SELL',
-                press: () {},
+                press: () {
+                  showModalBottomSheet(
+                      elevation: 10,
+                      backgroundColor: Colors.amber,
+                      context: context,
+                      builder: (ctx) => StatefulBuilder(
+                        builder: (context, StateSetter setState) {
+                          return Container(
+                              width: constraints.maxWidth,
+                              height: constraints.maxHeight*0.3,
+                              color: Colors.white54,
+                              alignment: Alignment.center,
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: constraints.maxWidth*0.4,
+                                    child: CounterCard(
+                                      count: cnt,
+                                      increment: () {
+                                        setState(() {
+                                          cnt++;
+                                        });
+                                      },
+                                      decrement: () {
+                                        if (cnt > 0) {
+                                          setState(() {
+                                            cnt--;
+                                          });
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                                    child: Container(
+                                      //width: length.width,
+                                      color: bgPrimary,
+                                      child: TextButton(
+                                          onPressed:
+                                              (){sellStocks(widget.stockName, cnt, widget.stockPrice);},
+                                          //buyStocks(widget.stockName, cnt, widget.stockPrice),
+                                          child: Text(
+                                            'Checkout',
+                                            style: TextStyle(
+                                              color: secondary,
+                                              fontSize: 25,
+                                            ),
+                                          )),
+                                    ),
+                                  ),
+                                ]
+                                    .map((e) => Padding(
+                                  padding: EdgeInsets.all(10.0),
+                                  child: e,
+                                ))
+                                    .toList(),
+                              ));
+                        },
+                      ));
+                },
                 color: bgPrimary,
                 textColor: btnColor,
                 length: 0.85,

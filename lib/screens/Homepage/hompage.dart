@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintech/constants.dart';
 import 'package:fintech/network/model/users.dart' as user;
 import 'package:flutter/material.dart';
+import '../PortFolio/portfolio.dart';
 import 'components/HomeCard.dart';
 import 'components/stock_card.dart';
 
@@ -46,41 +47,54 @@ class _HomepageState extends State<Homepage> {
                 ),
                 Padding(
                   padding: EdgeInsets.all(constraint.maxWidth * 0.05),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: constraint.maxWidth * 0.4,
-                        child: Text(
-                          'Welcome, \n ${user.userName} !',
-                          style: TextStyle(
-                            fontSize: constraint.maxWidth * 0.06,
-                            color: secondary,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => PortFolio()));
+                    },
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: constraint.maxWidth * 0.4,
+                          child: Text(
+                            'Welcome, \n ${user.userName} !',
+                            style: TextStyle(
+                              fontSize: constraint.maxWidth * 0.06,
+                              color: secondary,
+                            ),
                           ),
                         ),
-                      ),
-                      const Spacer(),
-                      Container(
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                          color: btnColor,
-                        ),
-                        height: constraint.maxHeight * 0.1,
-                        width: constraint.maxWidth * 0.4,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              '${user.userTokens} fs',
-                              style: TextStyle(
-                                fontSize: constraint.maxWidth * 0.075,
-                                fontWeight: FontWeight.w600,
+                        const Spacer(),
+                        Container(
+                          decoration: const BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(30.0)),
+                            color: btnColor,
+                          ),
+                          height: constraint.maxHeight * 0.1,
+                          width: constraint.maxWidth * 0.4,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                '${user.userTokens} fs',
+                                style: TextStyle(
+                                  fontSize: constraint.maxWidth * 0.075,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      )
-                    ],
+                        Spacer(),
+                        Icon(
+                          Icons.arrow_right_rounded,
+                          color: secondary,
+                          size: 40,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(
@@ -176,7 +190,7 @@ class _HomepageState extends State<Homepage> {
                                   );
                                 }
                                 return ListView.builder(
-                                  physics: const BouncingScrollPhysics(),
+                                    physics: const BouncingScrollPhysics(),
                                     scrollDirection: Axis.vertical,
                                     itemCount: userData.length,
                                     padding: const EdgeInsets.only(right: 5),
