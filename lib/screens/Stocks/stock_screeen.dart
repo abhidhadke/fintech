@@ -27,7 +27,6 @@ class _StocksScreenState extends State<StocksScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation _animation;
-  AnimationStatus _status = AnimationStatus.dismissed;
   List<ChartData> chartData = <ChartData>[];
 
   @override
@@ -42,7 +41,6 @@ class _StocksScreenState extends State<StocksScreen>
         setState(() {});
       })
       ..addStatusListener((status) {
-        _status = status;
       });
   }
 
@@ -204,7 +202,7 @@ class _StocksScreenState extends State<StocksScreen>
                                         ),
                                       ),
                                       ClipRRect(
-                                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                                        borderRadius: const BorderRadius.all(Radius.circular(20.0)),
                                         child: Container(
                                           //width: length.width,
                                           color: bgPrimary,
@@ -212,7 +210,7 @@ class _StocksScreenState extends State<StocksScreen>
                                               onPressed:
                                                   (){buyStocks(widget.stockName, cnt, widget.stockPrice);},
                                               //buyStocks(widget.stockName, cnt, widget.stockPrice),
-                                              child: Text(
+                                              child: const Text(
                                                 'Checkout',
                                                 style: TextStyle(
                                                   color: secondary,
@@ -223,7 +221,7 @@ class _StocksScreenState extends State<StocksScreen>
                                       ),
                                     ]
                                         .map((e) => Padding(
-                                              padding: EdgeInsets.all(10.0),
+                                              padding: const EdgeInsets.all(10.0),
                                               child: e,
                                             ))
                                         .toList(),
@@ -258,10 +256,13 @@ class _StocksScreenState extends State<StocksScreen>
                                     width: constraints.maxWidth*0.4,
                                     child: CounterCard(
                                       count: cnt,
-                                      increment: () {
-                                        setState(() {
-                                          cnt++;
-                                        });
+                                      increment: () async {
+                                        int maxAmt = await checkCount(widget.stockName);
+                                        if(cnt < maxAmt){
+                                          setState(() {
+                                            cnt++;
+                                          });
+                                        }
                                       },
                                       decrement: () {
                                         if (cnt > 0) {
@@ -273,7 +274,7 @@ class _StocksScreenState extends State<StocksScreen>
                                     ),
                                   ),
                                   ClipRRect(
-                                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                                    borderRadius: const BorderRadius.all(Radius.circular(20.0)),
                                     child: Container(
                                       //width: length.width,
                                       color: bgPrimary,
@@ -281,7 +282,7 @@ class _StocksScreenState extends State<StocksScreen>
                                           onPressed:
                                               (){sellStocks(widget.stockName, cnt, widget.stockPrice);},
                                           //buyStocks(widget.stockName, cnt, widget.stockPrice),
-                                          child: Text(
+                                          child: const Text(
                                             'Checkout',
                                             style: TextStyle(
                                               color: secondary,
@@ -292,7 +293,7 @@ class _StocksScreenState extends State<StocksScreen>
                                   ),
                                 ]
                                     .map((e) => Padding(
-                                  padding: EdgeInsets.all(10.0),
+                                  padding: const EdgeInsets.all(10.0),
                                   child: e,
                                 ))
                                     .toList(),
