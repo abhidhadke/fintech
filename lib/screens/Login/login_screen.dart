@@ -158,6 +158,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         } else if (e.code == 'invalid-email') {
                           errorMsg = '* The email address is invalid';
                         }
+                        else if(e.code == 'too-many-requests'){
+                          errorMsg = '* Too many requests, try again later';
+                        }
                         setState(() {
                           wrongPass = true;
                           isLoading = false;

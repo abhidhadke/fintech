@@ -100,7 +100,7 @@ class _HomepageState extends State<Homepage> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 10),
                                   child: Text(
-                                    'Welcome, \n ${user.userName} !',
+                                    'Welcome,\n${user.userName} !',
                                     style: TextStyle(
                                       fontSize: constraint.maxWidth * 0.06,
                                       color: secondary,
@@ -150,10 +150,10 @@ class _HomepageState extends State<Homepage> {
                                             builder: (context) =>
                                                 const PortFolio()));
                                   },
-                                  child: const Icon(
+                                  child: Icon(
                                     Icons.arrow_right_rounded,
-                                    color: secondary,
-                                    size: 50,
+                                    color: bgSecondary,
+                                    size: constraint.maxWidth * 0.1,
                                   ),
                                 ),
                               ],
