@@ -22,7 +22,6 @@ class _LoginScreenState extends State<LoginScreen> {
   String errorMsg = '';
   final _auth = FirebaseAuth.instance;
 
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
@@ -36,9 +35,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: constraints.maxHeight * 0.1,
               ),
               Image.asset('assets/logo.png'),
-              SizedBox(
-                height: constraints.maxHeight * 0.1,
-              ),
               Formfield(
                 size: constraints,
                 text: 'email',
@@ -69,17 +65,22 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(
                         height: constraints.maxHeight * 0.01,
                       ),
-                      Text(errorMsg, style: GoogleFonts.poppins(
-                          color: Colors.redAccent, fontStyle: FontStyle.italic),)
-                    ].map((e) => Padding(
-                      padding: EdgeInsets.only(left: constraints.maxWidth * 0.09),
-                      child: e,
-                    ))
+                      Text(
+                        errorMsg,
+                        style: GoogleFonts.poppins(
+                            color: Colors.redAccent,
+                            fontStyle: FontStyle.italic),
+                      )
+                    ]
+                        .map((e) => Padding(
+                              padding: EdgeInsets.only(
+                                  left: constraints.maxWidth * 0.09),
+                              child: e,
+                            ))
                         .toList(),
                   ),
                 ),
               ),
-              
               SizedBox(
                 height: constraints.maxHeight * 0.05,
               ),
@@ -101,7 +102,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 )),
                 child: ElevatedButton(
                   onPressed: () async {
-
                     debugPrint('tapped');
                     if (email == '') {
                       if (password == '') {
@@ -155,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           errorMsg = '* No user found for that email';
                         } else if (e.code == 'wrong-password') {
                           errorMsg = '* Wrong password provided for that user';
-                        } else if(e.code == 'invalid-email'){
+                        } else if (e.code == 'invalid-email') {
                           errorMsg = '* The email address is invalid';
                         }
                         setState(() {
@@ -173,6 +173,18 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: GoogleFonts.poppins(),
                         ),
                 ),
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(width: constraints.maxWidth * 0.4,child: Image.asset('assets/cascode_Logo.png')),
+                  SizedBox(width: constraints.maxWidth * 0.4,child: Image.asset('assets/josh_logo.png'))
+                ]
+                    .map((e) => Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 40),
+                          child: e,
+                        ))
+                    .toList(),
               ),
               SizedBox(
                 height: constraints.maxHeight * 0.1,
