@@ -29,6 +29,13 @@
             {
               "client_id": "16027971636-v0fqrdsl4t2pv6sjl7993krjp9ar5plq.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "16027971636-45rr80fbd7a63ah9tdvtdsmdku9u3rno.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fintech"
+              }
             }
           ]
         }

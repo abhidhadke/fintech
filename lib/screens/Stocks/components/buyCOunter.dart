@@ -6,11 +6,11 @@ class CounterCard extends StatelessWidget {
     super.key,
     required this.count,
     required this.increment,
-    required this.decrement,
+    required this.decrement, required this.constraints,
   });
 
   final int count;
-
+  final BoxConstraints constraints;
   final Function() increment;
   final Function() decrement;
 
@@ -22,13 +22,15 @@ class CounterCard extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: Container(
-          width: 120,
-          height: 100,
+          width: constraints.maxWidth * 0.05,
+          height: constraints.maxWidth * 0.1,
           color: Colors.white,
           child: Row(
+
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               SizedBox(
-                width: 40,
+                width: constraints.maxWidth * 0.1,
                 child: TextButton(
                   onPressed: decrement,
                   child: const Text(
@@ -38,14 +40,14 @@ class CounterCard extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: 40,
+                width: constraints.maxWidth * 0.05,
                 child: Text(
                   '$count',
                   textAlign: TextAlign.center,
                 ),
               ),
               SizedBox(
-                width: 40,
+                width: constraints.maxWidth * 0.1,
                 child: TextButton(
                   onPressed: increment,
                   child: const Text(

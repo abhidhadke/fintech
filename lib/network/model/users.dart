@@ -47,7 +47,7 @@ buyStocks(String stockName, int amount, int price) async {
             .update({'stock': newStockAmount});
       } else {}
     } else {}
-    //}
+    return 1;
   } catch (e, s) {
     debugPrint('$e, \n $s');
   }
@@ -87,6 +87,7 @@ sellStocks(String stockName, int amount, int price) async {
           .doc(uid)
           .update({'tokens': userTokens});
     } else {}
+    return 1;
   } catch (e) {
     debugPrint('$e');
   }
