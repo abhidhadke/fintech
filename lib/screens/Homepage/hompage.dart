@@ -19,7 +19,6 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   @override
   void initState() {
-    // TODO: implement initState
     getUserDetails();
     super.initState();
   }
@@ -165,7 +164,6 @@ class _HomepageState extends State<Homepage> {
                   ),
                   SliverToBoxAdapter(
                     child: Container(
-                      height: constraint.maxHeight * 0.85,
                       // width: constraint.maxWidth,
                       decoration: const BoxDecoration(
                         color: bgSecondary,
@@ -176,14 +174,14 @@ class _HomepageState extends State<Homepage> {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(top: 30),
-                        child: ListView(
+                        child: Column(
                           children: [
                             SizedBox(
                               width: constraint.maxWidth,
                               height: constraint.maxHeight * 0.18,
                               child: Padding(
                                 padding: const EdgeInsets.only(
-                                    left: 10, right: 10, top: 8, bottom: 8),
+                                    left: 20, right: 20, top: 8, bottom: 8),
                                 child: StreamBuilder<
                                     QuerySnapshot<Map<String, dynamic>>>(
                                   stream: FirebaseFirestore.instance
