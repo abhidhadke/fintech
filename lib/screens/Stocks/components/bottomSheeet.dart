@@ -5,8 +5,9 @@ import '../../../network/model/users.dart';
 import 'buyCOunter.dart';
 
 openBottomSheet(BuildContext context, BoxConstraints constraints, int cnt,
-    bool isBuy, String stockName, int stockPrice) {
+    bool isBuy, String stockName, int stockPrice, int currentAmt) {
   bool isLoading = false;
+
   return isBuy
       ? showModalBottomSheet(
           elevation: 10,
@@ -20,7 +21,7 @@ openBottomSheet(BuildContext context, BoxConstraints constraints, int cnt,
                 builder: (context, StateSetter setState) {
                   return Container(
                       width: constraints.maxWidth,
-                      height: constraints.maxHeight * 0.3,
+                      height: constraints.maxHeight * 0.35,
                       color: Colors.transparent,
                       child: Column(mainAxisSize: MainAxisSize.min, children: [
                         Row(
@@ -52,7 +53,7 @@ openBottomSheet(BuildContext context, BoxConstraints constraints, int cnt,
                             ),
                           ]
                               .map((e) => Padding(
-                                    padding: const EdgeInsets.all(10.0),
+                                    padding: const EdgeInsets.only(left: 10,right: 10,top: 10),
                                     child: e,
                                   ))
                               .toList(),
@@ -84,9 +85,39 @@ openBottomSheet(BuildContext context, BoxConstraints constraints, int cnt,
                                         )))),
                           ]
                               .map((e) => Padding(
-                                    padding: const EdgeInsets.all(10.0),
+                                    padding: const EdgeInsets.only(left: 10,right: 10,top: 10),
                                     child: e,
                                   ))
+                              .toList(),
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              'Current holding:',
+                              style: GoogleFonts.poppins(
+                                  fontSize: constraints.maxWidth * 0.04,
+                                  fontWeight: FontWeight.w600),
+                            ),
+
+                            SizedBox(
+                                width: constraints.maxWidth * 0.2,
+                                child: Card(
+                                    elevation: 3,
+                                    shadowColor: secondary,
+                                    child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Container(
+                                          width: constraints.maxWidth * 0.02,
+                                          height: constraints.maxWidth * 0.1,
+                                          alignment: Alignment.center,
+                                          color: Colors.white,
+                                          child: Text('$currentAmt'),
+                                        )))),
+                          ]
+                              .map((e) => Padding(
+                            padding: const EdgeInsets.only(left: 10,right: 10,top: 10),
+                            child: e,
+                          ))
                               .toList(),
                         ),
                         const Spacer(),
@@ -122,6 +153,7 @@ openBottomSheet(BuildContext context, BoxConstraints constraints, int cnt,
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(20.0)),
                               child: Container(
+                                padding: const EdgeInsets.all(5),
                                 //width: length.width,
                                 color: bgPrimary,
                                 child: TextButton(
@@ -138,12 +170,12 @@ openBottomSheet(BuildContext context, BoxConstraints constraints, int cnt,
                                       }
                                     },
                                     //buyStocks(widget.stockName, cnt, widget.stockPrice),
-                                    child: const Text(
+                                    child: isLoading ? const CircularProgressIndicator() : Text(
                                       'Checkout',
-                                      style: TextStyle(
+                                      style: GoogleFonts.poppins(
                                         color: secondary,
-                                        fontSize: 25,
-                                      ),
+                                        fontSize: 20,
+                                      )
                                     )),
                               ),
                             )
@@ -164,7 +196,7 @@ openBottomSheet(BuildContext context, BoxConstraints constraints, int cnt,
                 builder: (context, StateSetter setState) {
                   return Container(
                       width: constraints.maxWidth,
-                      height: constraints.maxHeight * 0.3,
+                      height: constraints.maxHeight * 0.35,
                       color: Colors.transparent,
                       child: Column(mainAxisSize: MainAxisSize.min, children: [
                         Row(
@@ -236,6 +268,36 @@ openBottomSheet(BuildContext context, BoxConstraints constraints, int cnt,
                                   ))
                               .toList(),
                         ),
+                        Row(
+                          children: [
+                            Text(
+                              'Current holding:',
+                              style: GoogleFonts.poppins(
+                                  fontSize: constraints.maxWidth * 0.04,
+                                  fontWeight: FontWeight.w600),
+                            ),
+
+                            SizedBox(
+                                width: constraints.maxWidth * 0.2,
+                                child: Card(
+                                    elevation: 3,
+                                    shadowColor: secondary,
+                                    child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Container(
+                                          width: constraints.maxWidth * 0.02,
+                                          height: constraints.maxWidth * 0.1,
+                                          alignment: Alignment.center,
+                                          color: Colors.white,
+                                          child: Text('$currentAmt'),
+                                        )))),
+                          ]
+                              .map((e) => Padding(
+                            padding: const EdgeInsets.only(left: 10,right: 10,top: 10),
+                            child: e,
+                          ))
+                              .toList(),
+                        ),
                         const Spacer(),
                         Padding(
                           padding: const EdgeInsets.all(10.0),
@@ -269,6 +331,7 @@ openBottomSheet(BuildContext context, BoxConstraints constraints, int cnt,
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(20.0)),
                               child: Container(
+                                padding: const EdgeInsets.all(5),
                                 //width: length.width,
                                 color: bgPrimary,
                                 child: TextButton(
@@ -285,12 +348,12 @@ openBottomSheet(BuildContext context, BoxConstraints constraints, int cnt,
                                       }
                                     },
                                     //buyStocks(widget.stockName, cnt, widget.stockPrice),
-                                    child: isLoading ? const CircularProgressIndicator() : const Text(
+                                    child: isLoading ? const CircularProgressIndicator() : Text(
                                       'Checkout',
-                                      style: TextStyle(
+                                      style: GoogleFonts.poppins(
                                         color: secondary,
-                                        fontSize: 25,
-                                      ),
+                                        fontSize: 20,
+                                      )
                                     )),
                               ),
                             )
@@ -299,4 +362,7 @@ openBottomSheet(BuildContext context, BoxConstraints constraints, int cnt,
                       ]));
                 },
               ));
+
 }
+
+

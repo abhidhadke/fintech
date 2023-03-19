@@ -20,27 +20,27 @@ buyStocks(String stockName, int amount, int price) async {
         .collection('company')
         .doc(myString)
         .get();
+    var stock =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
     debugPrint('${data.exists}');
+    int userStock = stock.data()?[stockName] ?? 0;
     int initialStockAmount = data.data()!['stock'];
     debugPrint(initialStockAmount.toString());
     //if (initialStockAmount != 0) {
     int stockAmount = amount;
     //int finalStockAmount = (if) stockAmount + ;
-        int stockPrice = price;
-        int totalAmount = stockPrice * stockAmount;
-        int newStockAmount = initialStockAmount - stockAmount;
-        debugPrint('$initialStockAmount $totalAmount $newStockAmount');
+    int stockPrice = price;
+    int totalAmount = stockPrice * stockAmount;
+    int newStockAmount = initialStockAmount - stockAmount;
+    debugPrint('$initialStockAmount $totalAmount $newStockAmount');
     if (initialStockAmount > newStockAmount) {
       if (totalAmount < userTokens) {
         userTokens = (userTokens - totalAmount);
+        userStock = userStock + stockAmount;
         await FirebaseFirestore.instance
             .collection('users')
             .doc(uid)
-            .update({'tokens': userTokens});
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(uid)
-            .update({stockName: stockAmount});
+            .update({'tokens': userTokens, stockName: userStock});
         await FirebaseFirestore.instance
             .collection('company')
             .doc(myString)
@@ -62,10 +62,8 @@ sellStocks(String stockName, int amount, int price) async {
         .collection('company')
         .doc(myString)
         .get();
-    var stock = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .get();
+    var stock =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
     int userStock = stock.data()![stockName];
     int initialStockAmount = data.data()!['stock'];
     int stockPrice = price;
@@ -81,11 +79,7 @@ sellStocks(String stockName, int amount, int price) async {
       await FirebaseFirestore.instance
           .collection('users')
           .doc(uid)
-          .update({stockName: userStock});
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .update({'tokens': userTokens});
+          .update({stockName: userStock, 'tokens': userTokens});
     } else {}
     return 1;
   } catch (e) {
@@ -94,10 +88,8 @@ sellStocks(String stockName, int amount, int price) async {
 }
 
 checkCount(String stockName) async {
-  var data = await FirebaseFirestore.instance
-      .collection('users')
-      .doc(uid)
-      .get();
+  var data =
+      await FirebaseFirestore.instance.collection('users').doc(uid).get();
   int maxStocks = data.data()![stockName];
   return maxStocks;
 }
