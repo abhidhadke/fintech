@@ -36,7 +36,7 @@ class _PortFolioState extends State<PortFolio> {
 
     List<String> exclude = ['tokens', 'username'];
 
-    docRef.get().then((doc) {
+    await docRef.get().then((doc) {
       if (doc.exists) {
         allfields = doc.data();
         for (String i in exclude) {
