@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintech/network/model/users.dart';
 import 'package:fintech/screens/Stocks/components/RoundedButton.dart';
@@ -7,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../constants.dart';
-import '../Homepage/hompage.dart';
 import 'components/chartData.dart';
 
 class StocksScreen extends StatefulWidget {
