@@ -91,10 +91,10 @@ class _StocksScreenState extends State<StocksScreen>
                 SfCartesianChart(
                     primaryXAxis: DateTimeAxis(
                         title: AxisTitle(
-                            text: 'Time', alignment: ChartAlignment.near)),
+                            text: 'Time', alignment: ChartAlignment.near, textStyle: GoogleFonts.poppins(color: secondary.withOpacity(0.4)))),
                     primaryYAxis: NumericAxis(
                         title: AxisTitle(
-                            text: 'Price', alignment: ChartAlignment.near)),
+                            text: 'Price', alignment: ChartAlignment.near, textStyle: GoogleFonts.poppins(color: secondary.withOpacity(0.4)))),
                     enableAxisAnimation: true,
                     series: <ChartSeries<ChartData, DateTime>>[
                       LineSeries<ChartData, DateTime>(
@@ -181,7 +181,7 @@ class _StocksScreenState extends State<StocksScreen>
                           color: secondary,
                           fontWeight: FontWeight.w600),
                           ),
-                          Text('${widget.stockPrice}', style: GoogleFonts.poppins(
+                          Text('${widget.stockPrice} T', style: GoogleFonts.poppins(
                               fontSize: constraints.maxWidth * 0.04,
                               color: secondary,
                               fontWeight: FontWeight.w600),
