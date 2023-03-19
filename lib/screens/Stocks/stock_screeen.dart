@@ -165,26 +165,17 @@ class _StocksScreenState extends State<StocksScreen>
                 //           ),
                 //   ),
                 // ),
-                SizedBox(
-                  width: constraints.maxWidth * 0.5,
+                Container(
+                  //width: constraints.maxWidth * 0.5,
                   child: Card(
                     elevation: 10,
                     color: bgPrimary,
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
-                      child: Row(
-                        children: [
-                          Text('Current Price: ', style: GoogleFonts.poppins(
-                          fontSize: constraints.maxWidth * 0.04,
-                          color: secondary,
-                          fontWeight: FontWeight.w600),
-                          ),
-                          Text('${widget.stockPrice} T', style: GoogleFonts.poppins(
-                              fontSize: constraints.maxWidth * 0.04,
-                              color: secondary,
-                              fontWeight: FontWeight.w600),
-                          )
-                        ],
+                      child: Text('Current Price: ${widget.stockPrice} T', style: GoogleFonts.poppins(
+                      fontSize: constraints.maxWidth * 0.04,
+                      color: secondary,
+                      fontWeight: FontWeight.w600),
                       ),
                     ),
                   ),

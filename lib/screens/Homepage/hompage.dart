@@ -274,6 +274,7 @@ class _HomepageState extends State<Homepage> {
                                       );
                                     }
                                     final userData = snapshot.data?.docs;
+                                    user.stockData = userData;
 
                                     if (userData!.isEmpty) {
                                       return const Center(

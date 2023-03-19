@@ -6,6 +6,8 @@ String? userName;
 int userTokens = 0;
 String? uid;
 
+var stockData;
+
 setData() async {
   final prefs = await SharedPreferences.getInstance();
   uid = prefs.getString('uid');
