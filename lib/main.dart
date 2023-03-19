@@ -27,8 +27,8 @@ Future<void> main() async {
   }catch(e){
     debugPrint('$e');
   }
-  final fcm = await FirebaseMessaging.instance.getToken();
-  debugPrint(fcm);
+  // final fcm = await FirebaseMessaging.instance.getToken();
+  // debugPrint(fcm);
 
   final prefs = await SharedPreferences.getInstance();
   bool login = prefs.getBool('login') ?? false;
