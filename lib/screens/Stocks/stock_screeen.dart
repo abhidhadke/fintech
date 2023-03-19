@@ -75,120 +75,126 @@ class _StocksScreenState extends State<StocksScreen>
     debugPrint('inside stock:${widget.stockName}');
     return LayoutBuilder(
       builder: (context, constraints) {
-        return Scaffold(
-          backgroundColor: bgSecondary,
-          appBar: _appBar(constraints),
-          body: Column(
-            children: [
-              const SizedBox(
-                height: 20,
-              ),
-              SfCartesianChart(
-                  primaryXAxis: DateTimeAxis(
-                      title: AxisTitle(
-                          text: 'Time', alignment: ChartAlignment.near)),
-                  primaryYAxis: NumericAxis(
-                      title: AxisTitle(
-                          text: 'Price', alignment: ChartAlignment.near)),
-                  enableAxisAnimation: true,
-                  series: <ChartSeries<ChartData, DateTime>>[
-                    LineSeries<ChartData, DateTime>(
-                        dataSource: chartData,
-                        xValueMapper: (ChartData data, _) => data.x,
-                        yValueMapper: (ChartData data, _) => data.y,
-                        xAxisName: 'Time',
-                        yAxisName: 'Price',
-                        width: 4.0),
-                  ]),
-              const SizedBox(
-                height: 30,
-              ),
-              // Transform(
-              //   alignment: FractionalOffset.center,
-              //   transform: Matrix4.identity()
-              //     ..setEntry(3, 2, 0.0015)
-              //     ..rotateX(pi * _animation.value),
-              //   child: Container(
-              //     decoration: const BoxDecoration(
-              //         borderRadius: BorderRadius.all(Radius.circular(20.0))),
-              //     child: _animation.value <= 0.5
-              //         ? InkWell(
-              //             onTap: () {
-              //               _controller.forward();
-              //             },
-              //             child: Container(
-              //                 decoration: const BoxDecoration(
-              //                   borderRadius:
-              //                       BorderRadius.all(Radius.circular(20.0)),
-              //                   color: Colors.deepOrange,
-              //                 ),
-              //                 width: constraints.maxWidth * 0.85,
-              //                 height: 100,
-              //                 child: const Center(
-              //                     child: Text(
-              //                   'Your Info\n(Tap Here)',
-              //                   style: TextStyle(
-              //                       fontSize: 20, color: Colors.white),
-              //                 ))),
-              //           )
-              //         : InkWell(
-              //             onTap: () {
-              //               _controller.reverse();
-              //             },
-              //             child: Container(
-              //                 decoration: const BoxDecoration(
-              //                   borderRadius:
-              //                       BorderRadius.all(Radius.circular(20.0)),
-              //                   color: Colors.deepOrange,
-              //                 ),
-              //                 width: constraints.maxWidth * 0.85,
-              //                 height: 100,
-              //                 //color: Colors.deepOrange,
-              //                 child: Transform(
-              //                   alignment: Alignment.center,
-              //                   transform: Matrix4.rotationY(pi),
-              //                   child: const RotatedBox(
-              //                     quarterTurns: 2,
-              //                     child: Center(
-              //                       child: Text(
-              //                         'You own xxx amount of yyy stock amounting to zzz fs',
-              //                         textAlign: TextAlign.center,
-              //                         style: TextStyle(
-              //                             fontSize: 20, color: Colors.white),
-              //                       ),
-              //                     ),
-              //                   ),
-              //                 )),
-              //           ),
-              //   ),
-              // ),
-              const SizedBox(
-                height: 30,
-              ),
-              RoundedButton(
-                text: 'BUY',
-                press: () async {
-                  openBottomSheet(context, constraints, cnt, true,
-                      widget.stockName, widget.stockPrice, amount);
-                },
-                color: bgPrimary,
-                textColor: btnColor,
-                length: 0.85,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              RoundedButton(
-                text: 'SELL',
-                press: () async {
-                  openBottomSheet(context, constraints, cnt, false,
-                      widget.stockName, widget.stockPrice, amount);
-                },
-                color: bgPrimary,
-                textColor: btnColor,
-                length: 0.85,
-              ),
-            ],
+        return WillPopScope(
+          onWillPop: () {
+            Navigator.pop(context, true);
+            return Future.value(false);
+          },
+          child: Scaffold(
+            backgroundColor: bgSecondary,
+            appBar: _appBar(constraints),
+            body: Column(
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                SfCartesianChart(
+                    primaryXAxis: DateTimeAxis(
+                        title: AxisTitle(
+                            text: 'Time', alignment: ChartAlignment.near)),
+                    primaryYAxis: NumericAxis(
+                        title: AxisTitle(
+                            text: 'Price', alignment: ChartAlignment.near)),
+                    enableAxisAnimation: true,
+                    series: <ChartSeries<ChartData, DateTime>>[
+                      LineSeries<ChartData, DateTime>(
+                          dataSource: chartData,
+                          xValueMapper: (ChartData data, _) => data.x,
+                          yValueMapper: (ChartData data, _) => data.y,
+                          xAxisName: 'Time',
+                          yAxisName: 'Price',
+                          width: 4.0),
+                    ]),
+                const SizedBox(
+                  height: 30,
+                ),
+                // Transform(
+                //   alignment: FractionalOffset.center,
+                //   transform: Matrix4.identity()
+                //     ..setEntry(3, 2, 0.0015)
+                //     ..rotateX(pi * _animation.value),
+                //   child: Container(
+                //     decoration: const BoxDecoration(
+                //         borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                //     child: _animation.value <= 0.5
+                //         ? InkWell(
+                //             onTap: () {
+                //               _controller.forward();
+                //             },
+                //             child: Container(
+                //                 decoration: const BoxDecoration(
+                //                   borderRadius:
+                //                       BorderRadius.all(Radius.circular(20.0)),
+                //                   color: Colors.deepOrange,
+                //                 ),
+                //                 width: constraints.maxWidth * 0.85,
+                //                 height: 100,
+                //                 child: const Center(
+                //                     child: Text(
+                //                   'Your Info\n(Tap Here)',
+                //                   style: TextStyle(
+                //                       fontSize: 20, color: Colors.white),
+                //                 ))),
+                //           )
+                //         : InkWell(
+                //             onTap: () {
+                //               _controller.reverse();
+                //             },
+                //             child: Container(
+                //                 decoration: const BoxDecoration(
+                //                   borderRadius:
+                //                       BorderRadius.all(Radius.circular(20.0)),
+                //                   color: Colors.deepOrange,
+                //                 ),
+                //                 width: constraints.maxWidth * 0.85,
+                //                 height: 100,
+                //                 //color: Colors.deepOrange,
+                //                 child: Transform(
+                //                   alignment: Alignment.center,
+                //                   transform: Matrix4.rotationY(pi),
+                //                   child: const RotatedBox(
+                //                     quarterTurns: 2,
+                //                     child: Center(
+                //                       child: Text(
+                //                         'You own xxx amount of yyy stock amounting to zzz fs',
+                //                         textAlign: TextAlign.center,
+                //                         style: TextStyle(
+                //                             fontSize: 20, color: Colors.white),
+                //                       ),
+                //                     ),
+                //                   ),
+                //                 )),
+                //           ),
+                //   ),
+                // ),
+                const SizedBox(
+                  height: 30,
+                ),
+                RoundedButton(
+                  text: 'BUY',
+                  press: () async {
+                    openBottomSheet(context, constraints, cnt, true,
+                        widget.stockName, widget.stockPrice, amount);
+                  },
+                  color: bgPrimary,
+                  textColor: btnColor,
+                  length: 0.85,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                RoundedButton(
+                  text: 'SELL',
+                  press: () async {
+                    openBottomSheet(context, constraints, cnt, false,
+                        widget.stockName, widget.stockPrice, amount);
+                  },
+                  color: bgPrimary,
+                  textColor: btnColor,
+                  length: 0.85,
+                ),
+              ],
+            ),
           ),
         );
       },
