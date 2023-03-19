@@ -34,7 +34,6 @@ class _StocksScreenState extends State<StocksScreen>
   void initState() {
     // TODO: implement initState
     getDataFromFireStore();
-    amount = checkCount(widget.stockName);
     super.initState();
     _controller =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
@@ -52,6 +51,7 @@ class _StocksScreenState extends State<StocksScreen>
         .doc(widget.stockName)
         .get()
         .then((value) => storeData(value));
+    amount = await checkCount(widget.stockName);
   }
 
   storeData(DocumentSnapshot<Map<String, dynamic>> value) {
@@ -200,12 +200,7 @@ class _StocksScreenState extends State<StocksScreen>
       backgroundColor: bgSecondary,
       leading: IconButton(
         onPressed: () async {
-          await Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => Homepage(
-                        uid: uid!,
-                      )));
+          Navigator.pop(context, true);
         },
         icon: const Icon(
           Icons.arrow_back_ios_rounded,

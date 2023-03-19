@@ -1,11 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintech/constants.dart';
 import 'package:fintech/network/model/users.dart' as user;
+import 'package:fintech/screens/Stocks/stock_screeen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../News/News_page.dart';
 import '../PortFolio/portfolio.dart';
 import 'components/HomeCard.dart';
 import 'components/stock_card.dart';
+
+
 
 class Homepage extends StatefulWidget {
   final String uid;
@@ -33,6 +37,8 @@ class _HomepageState extends State<Homepage> {
     //debugPrint(UserTokens);
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -43,6 +49,7 @@ class _HomepageState extends State<Homepage> {
               extendBodyBehindAppBar: false,
               appBar: AppBar(
                 backgroundColor: Colors.transparent,
+                elevation: 5,
                 actions: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -52,7 +59,8 @@ class _HomepageState extends State<Homepage> {
                 title: Text(
                   'Wall Street Harvest',
                   style: GoogleFonts.poppins(
-                      color: secondary,
+                      color: bgSecondary,
+                      fontWeight: FontWeight.w700,
                       fontSize: constraint.maxWidth * 0.07),
                 ),
               ),
@@ -130,27 +138,32 @@ class _HomepageState extends State<Homepage> {
                                               color: secondary),
                                         ),
                                         onTap: () async {
-                                          await Navigator.push(
+                                          var push = await Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       const PortFolio()));
+                                          if(push == true){
+                                           await getUserDetails();
+                                          }
                                         },
                                       ),
                                     ],
                                   ),
                                 ),
-                                const Spacer(),
                                 InkWell(
                                   onTap: () async {
-                                    await Navigator.push(
+                                    var push = await Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                const PortFolio()));
+                                            const PortFolio()));
+                                    if(push == true){
+                                      await getUserDetails();
+                                    }
                                   },
                                   child: Icon(
-                                    Icons.arrow_right_rounded,
+                                    Icons.chevron_right,
                                     color: bgSecondary,
                                     size: constraint.maxWidth * 0.1,
                                   ),
@@ -212,10 +225,18 @@ class _HomepageState extends State<Homepage> {
                                         padding:
                                             const EdgeInsets.only(right: 5),
                                         itemBuilder: (context, index) {
-                                          return HomeCard(
-                                            constraint: constraint,
-                                            title: userData[index]
-                                                ['news_title'],
+                                          return InkWell(
+                                            onTap: ()async{
+                                              var push = await Navigator.push(context, MaterialPageRoute(builder: (_)=>const NewsPage()));
+                                              if(push == true){
+                                                await getUserDetails();
+                                              }
+                                              },
+                                            child: HomeCard(
+                                              constraint: constraint,
+                                              title: userData[index]
+                                                  ['news_title'],
+                                            ),
                                           );
                                         });
                                   },
@@ -266,15 +287,23 @@ class _HomepageState extends State<Homepage> {
                                         padding:
                                             const EdgeInsets.only(right: 5),
                                         itemBuilder: (context, index) {
-                                          return StocksCard(
-                                            constraint: constraint,
-                                            stockName: userData[index]['name'],
-                                            stockLogo: userData[index]['link'],
-                                            stockPrice: userData[index]['price']
-                                                .toDouble(),
-                                            stockChange: userData[index]
-                                                    ['incdec']
-                                                .toDouble(),
+                                          return InkWell(
+                                            onTap: ()async{
+                                              var push = await Navigator.push(context, MaterialPageRoute(builder: (_)=>StocksScreen(stockName: userData[index]['name'], stockPrice: userData[index]['price'])));
+                                              if(push == true){
+                                                await getUserDetails();
+                                              }
+                                              },
+                                            child: StocksCard(
+                                              constraint: constraint,
+                                              stockName: userData[index]['name'],
+                                              stockLogo: userData[index]['link'],
+                                              stockPrice: userData[index]['price']
+                                                  .toDouble(),
+                                              stockChange: userData[index]
+                                                      ['incdec']
+                                                  .toDouble(),
+                                            ),
                                           );
                                         });
                                   },

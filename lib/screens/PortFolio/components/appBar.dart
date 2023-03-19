@@ -8,7 +8,7 @@ appBar(BuildContext context) {
     backgroundColor: bgSecondary,
     leading: IconButton(
       onPressed: () {
-        Navigator.pop(context);
+        Navigator.pop(context, true);
       },
       icon: const Icon(Icons.arrow_back_ios_rounded),
       color: secondary,

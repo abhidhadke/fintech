@@ -22,36 +22,31 @@ class StocksCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: InkWell(
-        onTap: ()async {
-          await Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>StocksScreen(stockName: stockName, stockPrice: stockPrice.ceil(),)));
-        },
-        child: Card(
-          elevation: 4,
-          child: ListTile(
-            contentPadding: const EdgeInsets.all(10),
-            title: Text(
-              stockName,
-              style: GoogleFonts.poppins(
-                  fontSize: constraint.maxWidth * 0.045,
-                  fontWeight: FontWeight.w600),
-            ),
-            leading: SizedBox(
-                width: constraint.maxWidth * 0.09,
-                height: constraint.maxHeight * 0.08,
-                child: Image.network(stockLogo)),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Text(
-                //   'fs $stockPrice',
-                //   style: GoogleFonts.poppins(
-                //       fontSize: constraint.maxWidth * 0.035,
-                //       fontWeight: FontWeight.w500),
-                // ),
-                _arrowSign(stockChange),
-              ],
-            ),
+      child: Card(
+        elevation: 4,
+        child: ListTile(
+          contentPadding: const EdgeInsets.all(10),
+          title: Text(
+            stockName,
+            style: GoogleFonts.poppins(
+                fontSize: constraint.maxWidth * 0.045,
+                fontWeight: FontWeight.w600),
+          ),
+          leading: SizedBox(
+              width: constraint.maxWidth * 0.09,
+              height: constraint.maxHeight * 0.08,
+              child: Image.network(stockLogo)),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Text(
+              //   'fs $stockPrice',
+              //   style: GoogleFonts.poppins(
+              //       fontSize: constraint.maxWidth * 0.035,
+              //       fontWeight: FontWeight.w500),
+              // ),
+              _arrowSign(stockChange),
+            ],
           ),
         ),
       ),
