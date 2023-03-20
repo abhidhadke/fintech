@@ -25,12 +25,16 @@ class _PortFolioState extends State<PortFolio> {
 
   final docRef = FirebaseFirestore.instance.collection('users').doc(user.uid);
   var excludedfields;
-  late Map<String, dynamic>? allfields;
+  late QuerySnapshot<Map<String, dynamic>> stockData;
+  Map<String, dynamic>? allfields = {};
+  late var allData;
 
   getUserDetails() async {
     await user.setData();
     final db = FirebaseFirestore.instance;
     final data = await db.collection('users').doc(user.uid).get();
+    stockData = await db.collection('company').get();
+    allData = stockData.docs.map((e) => e.data()).toList();
     user.userName = data.data()!['username'];
     user.userTokens = data.data()!['tokens'];
 
@@ -43,7 +47,7 @@ class _PortFolioState extends State<PortFolio> {
           if (allfields!.containsKey(i)) {
             allfields!.remove(i);
           }
-          ;
+
         }
         //excludedfields = allfields?.keys.toList().sublist(3);
       }
@@ -53,78 +57,112 @@ class _PortFolioState extends State<PortFolio> {
     //debugPrint(UserTokens);
   }
 
+  Map<String, dynamic> getMapByName(String name) {
+    for (var map in allData) {
+      if (map["name"] == name) {
+        return map;
+      }
+    }
+    return {};
+  }
+
   @override
   Widget build(BuildContext context) {
     List stockNames = allfields!.keys.toList();
     List stockCount = allfields!.values.toList();
-    return Scaffold(
-      backgroundColor: bgSecondary,
-      appBar: appBar(context),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          return SizedBox(
-            width: constraints.maxWidth,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(height: constraints.maxHeight*0.05,),
-                Text(
-                  'Hello $userName !',
-                  style: const TextStyle(
-                    fontSize: 40,
-                    color: secondary,
+    return WillPopScope(
+      onWillPop: (){
+        Navigator.pop(context, true);
+        return Future.value(false);
+      },
+      child: Scaffold(
+        backgroundColor: bgSecondary,
+        appBar: appBar(context),
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            return SizedBox(
+              width: constraints.maxWidth,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(height: constraints.maxHeight*0.05,),
+                  Text(
+                    'Hello $userName !',
+                    style: const TextStyle(
+                      fontSize: 40,
+                      color: secondary,
+                    ),
                   ),
-                ),
-                SizedBox(height: constraints.maxHeight*0.02,),
-                const Text(
-                  'Your Current Holdings Include\nthe following Stocks ',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: secondary,
-                    fontSize: 25,
+                  SizedBox(height: constraints.maxHeight*0.02,),
+                  const Text(
+                    'Your Current Holdings Include\nthe following Stocks ',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: secondary,
+                      fontSize: 25,
+                    ),
                   ),
-                ),
-                SizedBox(height: constraints.maxHeight*0.05,),
-                Expanded(
-                  child: ListView.builder(
-                      itemCount: allfields!.length,
-                      itemBuilder: (context2, index) {
-                        return (stockCount[index] != 0)
-                            ? Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Card(
-                                  elevation: 4,
-                                  child: ListTile(
-                                    contentPadding: const EdgeInsets.all(10),
-                                    title: Text(
-                                      stockNames[index],
-                                      style: GoogleFonts.poppins(
-                                          fontSize:
-                                              constraints.maxWidth * 0.045,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    trailing: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          'stocks: ${stockCount[index]}',
-                                          style: GoogleFonts.poppins(
-                                              fontSize:
-                                                  constraints.maxWidth * 0.035,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ],
+                  SizedBox(height: constraints.maxHeight*0.05,),
+                  Expanded(
+                    child: ListView.builder(
+                        itemCount: allfields!.length,
+                        itemBuilder: (context2, index) {
+                          Map price = getMapByName(stockNames[index]);
+                          var stockPrice = price['price'] ?? 0;
+                          return (stockCount[index] != 0)
+                              ? Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Card(
+                                    elevation: 4,
+                                    child: ListTile(
+                                      contentPadding: const EdgeInsets.all(10),
+                                      title: Text(
+                                        stockNames[index],
+                                        style: GoogleFonts.poppins(
+                                            fontSize:
+                                                constraints.maxWidth * 0.045,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      trailing: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                'stocks: ${stockCount[index]}',
+                                                style: GoogleFonts.poppins(
+                                                    fontSize:
+                                                        constraints.maxWidth * 0.035,
+                                                    fontWeight: FontWeight.w500),
+                                              ),
+                                            ],
+                                          ),
+                                          Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                'holdings: ${stockCount[index] * stockPrice } T',
+                                                style: GoogleFonts.poppins(
+                                                    fontSize:
+                                                    constraints.maxWidth * 0.035,
+                                                    fontWeight: FontWeight.w500),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              )
-                            : Container();
-                      }),
-                )
-              ],
-            ),
-          );
-        },
+                                )
+                              : Container();
+                        }),
+                  )
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
