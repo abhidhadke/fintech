@@ -166,7 +166,9 @@ openBottomSheet(BuildContext context, BoxConstraints constraints, int cnt,
                                         Navigator.pop(context);
                                       }
                                       else{
-
+                                        setState((){
+                                          isLoading = false;
+                                        });
                                       }
                                     },
                                     //buyStocks(widget.stockName, cnt, widget.stockPrice),
