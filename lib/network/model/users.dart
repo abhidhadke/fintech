@@ -52,6 +52,7 @@ buyStocks(String stockName, int amount, int price) async {
     return 1;
   } catch (e, s) {
     debugPrint('$e, \n $s');
+    return 0;
   }
 }
 
@@ -86,6 +87,7 @@ sellStocks(String stockName, int amount, int price) async {
     return 1;
   } catch (e) {
     debugPrint('$e');
+    return 0;
   }
 }
 
