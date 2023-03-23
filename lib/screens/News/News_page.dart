@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintech/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'components/appBar.dart';
 import 'components/news_card.dart';
 
@@ -12,6 +13,27 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State<NewsPage> {
+
+  final RefreshController _newsRefreshController = RefreshController();
+  bool newsLoading = true;
+  var newsData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getNewsData();
+  }
+
+  getNewsData() async {
+    final news = await FirebaseFirestore.instance.collection('news_alerts').get();
+    newsData = news.docs.map((e) => e.data()).toList();
+    debugPrint('getting news Data');
+    setState(() {
+      newsLoading = false;
+      _newsRefreshController.refreshCompleted();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
@@ -37,39 +59,28 @@ class _NewsPageState extends State<NewsPage> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.only(top: 30, left: 10, right: 10),
-                    child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                      stream: FirebaseFirestore.instance
-                          .collection('news_alerts')
-                          .orderBy('news_time', descending: true)
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return Center(
-                            child: SizedBox(
-                              height: constraints.maxHeight * 0.05,
-                              child: const CircularProgressIndicator(),
-                            ),
-                          );
-                        }
-                        final userData = snapshot.data?.docs;
-                        if (userData!.isEmpty) {
-                          return const Center(
-                            child: Text('No Data'),
-                          );
-                        }
-                        return ListView.builder(
-                            itemCount: userData.length,
-                            itemBuilder: (context, index) {
-                              return NewsCard(
-                                constraints: constraints,
-                                newsTitle: userData[index]['news_title'],
-                                newsBody: userData[index]['news_body'],
-                                newsDate: userData[index]['news_time'].toDate(),
-                                url: userData[index]['url'],
-                              );
-                            });
-                      },
-                    ),
+                    child: SmartRefresher(
+                      header: const WaterDropMaterialHeader(
+                        backgroundColor: secondary,
+                        color: bgSecondary,
+                      ),
+                      onRefresh: getNewsData,
+                      enablePullDown: true,
+                      enablePullUp: false,
+                      controller: _newsRefreshController,
+                      child: ListView.builder(
+                          itemCount: newsData.length,
+                          itemBuilder: (context, index) {
+                            Map news = newsData[index];
+                            return NewsCard(
+                              constraints: constraints,
+                              newsTitle: news['news_title'],
+                              newsBody: news['news_body'],
+                              newsDate: news['news_time'].toDate(),
+                              url: news['url'],
+                            );
+                          })
+                    )
                   ),
                 ),
               ),

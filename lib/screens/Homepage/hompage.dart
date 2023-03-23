@@ -4,12 +4,11 @@ import 'package:fintech/network/model/users.dart' as user;
 import 'package:fintech/screens/Stocks/stock_screeen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../News/News_page.dart';
 import '../PortFolio/portfolio.dart';
 import 'components/HomeCard.dart';
 import 'components/stock_card.dart';
-
-
 
 class Homepage extends StatefulWidget {
   final String uid;
@@ -21,10 +20,21 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  var stockData = [];
+  var newsData = [];
+  bool stockLoading = true;
+  bool newsLoading = true;
+  final RefreshController _newsRefreshController =
+      RefreshController(initialRefresh: false);
+  final RefreshController _stockRefreshController =
+      RefreshController(initialRefresh: false);
+
   @override
   void initState() {
-    getUserDetails();
     super.initState();
+    getUserDetails();
+    getStocksData();
+    getNewsData();
   }
 
   getUserDetails() async {
@@ -37,7 +47,27 @@ class _HomepageState extends State<Homepage> {
     //debugPrint(UserTokens);
   }
 
+  getStocksData() async {
+    final data = await FirebaseFirestore.instance.collection('company').get();
+    stockData = data.docs.map((e) => e.data()).toList();
+    debugPrint('getting stocks data');
+    setState(() {
+      stockLoading = false;
+      _stockRefreshController.refreshCompleted();
+    });
+    //TODO: Implement a timeout function
+  }
 
+  getNewsData() async {
+    final news =
+        await FirebaseFirestore.instance.collection('news_alerts').get();
+    newsData = news.docs.map((e) => e.data()).toList();
+    debugPrint('getting news Data');
+    setState(() {
+      newsLoading = false;
+      _newsRefreshController.refreshCompleted();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +137,7 @@ class _HomepageState extends State<Homepage> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 10),
                                   child: Text(
-                                    'Welcome,\n${user.userName} !',
+                                    'Welcome,\n${user.userName}!',
                                     style: TextStyle(
                                       fontSize: constraint.maxWidth * 0.06,
                                       color: secondary,
@@ -143,8 +173,8 @@ class _HomepageState extends State<Homepage> {
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       const PortFolio()));
-                                          if(push == true){
-                                           await getUserDetails();
+                                          if (push == true) {
+                                            await getUserDetails();
                                           }
                                         },
                                       ),
@@ -157,8 +187,8 @@ class _HomepageState extends State<Homepage> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                            const PortFolio()));
-                                    if(push == true){
+                                                const PortFolio()));
+                                    if (push == true) {
                                       await getUserDetails();
                                     }
                                   },
@@ -195,52 +225,34 @@ class _HomepageState extends State<Homepage> {
                               child: Padding(
                                 padding: const EdgeInsets.only(
                                     left: 20, right: 20, top: 8, bottom: 8),
-                                child: StreamBuilder<
-                                    QuerySnapshot<Map<String, dynamic>>>(
-                                  stream: FirebaseFirestore.instance
-                                      .collection('news_alerts')
-                                      .orderBy('news_time', descending: true)
-                                      .snapshots(),
-                                  builder: (context, snapshot) {
-                                    if (!snapshot.hasData) {
-                                      return Center(
-                                        child: SizedBox(
-                                          height: constraint.maxHeight * 0.05,
-                                          child:
-                                              const CircularProgressIndicator(
-                                            color: Colors.blue,
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                    final userData = snapshot.data?.docs;
-                                    if (userData!.isEmpty) {
-                                      return const Center(
-                                        child: Text('No Data'),
-                                      );
-                                    }
-                                    return ListView.builder(
+                                child: newsLoading
+                                    ? const Center(
+                                        child: CircularProgressIndicator())
+                                    : ListView.builder(
                                         scrollDirection: Axis.horizontal,
-                                        itemCount: userData.length,
+                                        itemCount: newsData.length,
                                         padding:
                                             const EdgeInsets.only(right: 5),
                                         itemBuilder: (context, index) {
+                                          Map news = newsData[index];
                                           return InkWell(
-                                            onTap: ()async{
-                                              var push = await Navigator.push(context, MaterialPageRoute(builder: (_)=>const NewsPage()));
-                                              if(push == true){
+                                            onTap: () async {
+                                              var push = await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (_) =>
+                                                          const NewsPage()));
+                                              if (push == true) {
                                                 await getUserDetails();
+                                                await getNewsData();
                                               }
-                                              },
+                                            },
                                             child: HomeCard(
                                               constraint: constraint,
-                                              title: userData[index]
-                                                  ['news_title'],
+                                              title: news['news_title'],
                                             ),
                                           );
-                                        });
-                                  },
-                                ),
+                                        }),
                               ),
                             ),
                             Padding(
@@ -250,66 +262,61 @@ class _HomepageState extends State<Homepage> {
                                   constraint.maxWidth * 0.05,
                                   0.0),
                               child: Container(
-                                decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                  Radius.circular(15.0),
-                                )),
-                                width: constraint.maxWidth,
-                                height: constraint.maxHeight * 0.6,
-                                child: StreamBuilder<
-                                    QuerySnapshot<Map<String, dynamic>>>(
-                                  stream: FirebaseFirestore.instance
-                                      .collection('company')
-                                      .snapshots(),
-                                  builder: (context, snapshot) {
-                                    if (!snapshot.hasData) {
-                                      return Center(
-                                        child: SizedBox(
-                                          height: constraint.maxHeight * 0.05,
-                                          child:
-                                              const CircularProgressIndicator(
-                                            color: Colors.blue,
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                    final userData = snapshot.data?.docs;
-                                    user.stockData = userData;
-
-                                    if (userData!.isEmpty) {
-                                      return const Center(
-                                        child: Text('No Data'),
-                                      );
-                                    }
-                                    return ListView.builder(
-                                        physics: const BouncingScrollPhysics(),
-                                        scrollDirection: Axis.vertical,
-                                        itemCount: userData.length,
-                                        padding:
-                                            const EdgeInsets.only(right: 5),
-                                        itemBuilder: (context, index) {
-                                          return InkWell(
-                                            onTap: ()async{
-                                              var push = await Navigator.push(context, MaterialPageRoute(builder: (_)=>StocksScreen(stockName: userData[index]['name'], stockPrice: userData[index]['price'])));
-                                              if(push == true){
-                                                await getUserDetails();
-                                              }
-                                              },
-                                            child: StocksCard(
-                                              constraint: constraint,
-                                              stockName: userData[index]['name'],
-                                              stockLogo: userData[index]['link'],
-                                              stockPrice: userData[index]['price']
-                                                  .toDouble(),
-                                              stockChange: userData[index]
-                                                      ['incdec']
-                                                  .toDouble(),
-                                            ),
-                                          );
-                                        });
-                                  },
-                                ),
-                              ),
+                                  decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                    Radius.circular(15.0),
+                                  )),
+                                  width: constraint.maxWidth,
+                                  height: constraint.maxHeight * 0.6,
+                                  child: stockLoading
+                                      ? const Align(
+                                          alignment: Alignment.topCenter,
+                                          child: CircularProgressIndicator())
+                                      : SmartRefresher(
+                                    header: const WaterDropMaterialHeader(
+                                      backgroundColor: bgSecondary,
+                                      color: secondary,
+                                    ),
+                                          enablePullDown: true,
+                                          onRefresh: getStocksData,
+                                          enablePullUp: false,
+                                          controller: _stockRefreshController,
+                                          child: ListView.builder(
+                                              itemCount: stockData.length,
+                                              itemBuilder: (context, index) {
+                                                Map stockMap = stockData[index];
+                                                return InkWell(
+                                                  onTap: () async {
+                                                    var push = await Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (_) => StocksScreen(
+                                                                stockName:
+                                                                    stockMap[
+                                                                        'name'],
+                                                                stockPrice:
+                                                                    stockMap[
+                                                                        'price'])));
+                                                    if (push == true) {
+                                                      await getUserDetails();
+                                                      await getStocksData();
+                                                    }
+                                                  },
+                                                  child: StocksCard(
+                                                      constraint: constraint,
+                                                      stockName:
+                                                          stockMap['name'],
+                                                      stockLogo:
+                                                          stockMap['link'],
+                                                      stockPrice:
+                                                          stockMap['price']
+                                                              .toDouble(),
+                                                      stockChange:
+                                                          stockMap['incdec']
+                                                              .toDouble()),
+                                                );
+                                              }),
+                                        )),
                             ),
                           ],
                         ),
