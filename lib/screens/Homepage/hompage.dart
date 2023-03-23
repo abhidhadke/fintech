@@ -1,14 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintech/constants.dart';
 import 'package:fintech/network/model/users.dart' as user;
-import 'package:fintech/screens/Stocks/stock_screeen.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import '../News/News_page.dart';
 import '../PortFolio/portfolio.dart';
-import 'components/HomeCard.dart';
-import 'components/stock_card.dart';
+import 'components/appBar.dart';
+import 'components/newsList.dart';
+import 'components/stocksList.dart';
 
 class Homepage extends StatefulWidget {
   final String uid;
@@ -55,7 +53,6 @@ class _HomepageState extends State<Homepage> {
       stockLoading = false;
       _stockRefreshController.refreshCompleted();
     });
-    //TODO: Implement a timeout function
   }
 
   getNewsData() async {
@@ -77,23 +74,7 @@ class _HomepageState extends State<Homepage> {
           child: Scaffold(
               backgroundColor: btnColor,
               extendBodyBehindAppBar: false,
-              appBar: AppBar(
-                backgroundColor: Colors.transparent,
-                elevation: 5,
-                actions: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.asset('assets/mcoe_logo.png'),
-                  )
-                ],
-                title: Text(
-                  'Wall Street Harvest',
-                  style: GoogleFonts.poppins(
-                      color: bgSecondary,
-                      fontWeight: FontWeight.w700,
-                      fontSize: constraint.maxWidth * 0.07),
-                ),
-              ),
+              appBar: appBarHome(constraint),
               body: CustomScrollView(
                 slivers: <Widget>[
                   SliverAppBar(
@@ -219,105 +200,8 @@ class _HomepageState extends State<Homepage> {
                         padding: const EdgeInsets.only(top: 30),
                         child: Column(
                           children: [
-                            SizedBox(
-                              width: constraint.maxWidth,
-                              height: constraint.maxHeight * 0.18,
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 20, right: 20, top: 8, bottom: 8),
-                                child: newsLoading
-                                    ? const Center(
-                                        child: CircularProgressIndicator())
-                                    : ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: newsData.length,
-                                        padding:
-                                            const EdgeInsets.only(right: 5),
-                                        itemBuilder: (context, index) {
-                                          Map news = newsData[index];
-                                          return InkWell(
-                                            onTap: () async {
-                                              var push = await Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (_) =>
-                                                          const NewsPage()));
-                                              if (push == true) {
-                                                await getUserDetails();
-                                                await getNewsData();
-                                              }
-                                            },
-                                            child: HomeCard(
-                                              constraint: constraint,
-                                              title: news['news_title'],
-                                            ),
-                                          );
-                                        }),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(
-                                  constraint.maxWidth * 0.05,
-                                  constraint.maxWidth * 0.1,
-                                  constraint.maxWidth * 0.05,
-                                  0.0),
-                              child: Container(
-                                  decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                    Radius.circular(15.0),
-                                  )),
-                                  width: constraint.maxWidth,
-                                  height: constraint.maxHeight * 0.6,
-                                  child: stockLoading
-                                      ? const Align(
-                                          alignment: Alignment.topCenter,
-                                          child: CircularProgressIndicator())
-                                      : SmartRefresher(
-                                    header: const WaterDropMaterialHeader(
-                                      backgroundColor: bgSecondary,
-                                      color: secondary,
-                                    ),
-                                          enablePullDown: true,
-                                          onRefresh: getStocksData,
-                                          enablePullUp: false,
-                                          controller: _stockRefreshController,
-                                          child: ListView.builder(
-                                              itemCount: stockData.length,
-                                              itemBuilder: (context, index) {
-                                                Map stockMap = stockData[index];
-                                                return InkWell(
-                                                  onTap: () async {
-                                                    var push = await Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (_) => StocksScreen(
-                                                                stockName:
-                                                                    stockMap[
-                                                                        'name'],
-                                                                stockPrice:
-                                                                    stockMap[
-                                                                        'price'])));
-                                                    if (push == true) {
-                                                      await getUserDetails();
-                                                      await getStocksData();
-                                                    }
-                                                  },
-                                                  child: StocksCard(
-                                                      constraint: constraint,
-                                                      stockName:
-                                                          stockMap['name'],
-                                                      stockLogo:
-                                                          stockMap['link'],
-                                                      stockPrice:
-                                                          stockMap['price']
-                                                              .toDouble(),
-                                                      stockChange:
-                                                          stockMap['incdec']
-                                                              .toDouble()),
-                                                );
-                                              }),
-                                        )),
-                            ),
+                            buildNewsList(constraint,newsLoading,newsData,getUserDetails,getNewsData),
+                            buildStocksList(constraint,stockLoading,getStocksData,getUserDetails,_stockRefreshController,stockData),
                           ],
                         ),
                       ),
@@ -329,4 +213,10 @@ class _HomepageState extends State<Homepage> {
       },
     );
   }
+
+
+
+
+
+
 }

@@ -22,24 +22,14 @@ class StocksScreen extends StatefulWidget {
 
 class _StocksScreenState extends State<StocksScreen>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation _animation;
   List<ChartData> chartData = <ChartData>[];
   int cnt = 0;
   int amount = 0;
 
   @override
   void initState() {
-    // TODO: implement initState
     getDataFromFireStore();
     super.initState();
-    _controller =
-        AnimationController(vsync: this, duration: const Duration(seconds: 1));
-    _animation = Tween(end: 1.0, begin: 0.0).animate(_controller)
-      ..addListener(() {
-        setState(() {});
-      })
-      ..addStatusListener((status) {});
   }
 
   Future<void> getDataFromFireStore() async {
@@ -106,77 +96,15 @@ class _StocksScreenState extends State<StocksScreen>
                 const SizedBox(
                   height: 30,
                 ),
-                // Transform(
-                //   alignment: FractionalOffset.center,
-                //   transform: Matrix4.identity()
-                //     ..setEntry(3, 2, 0.0015)
-                //     ..rotateX(pi * _animation.value),
-                //   child: Container(
-                //     decoration: const BoxDecoration(
-                //         borderRadius: BorderRadius.all(Radius.circular(20.0))),
-                //     child: _animation.value <= 0.5
-                //         ? InkWell(
-                //             onTap: () {
-                //               _controller.forward();
-                //             },
-                //             child: Container(
-                //                 decoration: const BoxDecoration(
-                //                   borderRadius:
-                //                       BorderRadius.all(Radius.circular(20.0)),
-                //                   color: Colors.deepOrange,
-                //                 ),
-                //                 width: constraints.maxWidth * 0.85,
-                //                 height: 100,
-                //                 child: const Center(
-                //                     child: Text(
-                //                   'Your Info\n(Tap Here)',
-                //                   style: TextStyle(
-                //                       fontSize: 20, color: Colors.white),
-                //                 ))),
-                //           )
-                //         : InkWell(
-                //             onTap: () {
-                //               _controller.reverse();
-                //             },
-                //             child: Container(
-                //                 decoration: const BoxDecoration(
-                //                   borderRadius:
-                //                       BorderRadius.all(Radius.circular(20.0)),
-                //                   color: Colors.deepOrange,
-                //                 ),
-                //                 width: constraints.maxWidth * 0.85,
-                //                 height: 100,
-                //                 //color: Colors.deepOrange,
-                //                 child: Transform(
-                //                   alignment: Alignment.center,
-                //                   transform: Matrix4.rotationY(pi),
-                //                   child: const RotatedBox(
-                //                     quarterTurns: 2,
-                //                     child: Center(
-                //                       child: Text(
-                //                         'You own xxx amount of yyy stock amounting to zzz fs',
-                //                         textAlign: TextAlign.center,
-                //                         style: TextStyle(
-                //                             fontSize: 20, color: Colors.white),
-                //                       ),
-                //                     ),
-                //                   ),
-                //                 )),
-                //           ),
-                //   ),
-                // ),
-                Container(
-                  //width: constraints.maxWidth * 0.5,
-                  child: Card(
-                    elevation: 10,
-                    color: bgPrimary,
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Text('Current Price: ${widget.stockPrice} T', style: GoogleFonts.poppins(
-                      fontSize: constraints.maxWidth * 0.04,
-                      color: secondary,
-                      fontWeight: FontWeight.w600),
-                      ),
+                Card(
+                  elevation: 10,
+                  color: bgPrimary,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Text('Current Price: ${widget.stockPrice} T', style: GoogleFonts.poppins(
+                    fontSize: constraints.maxWidth * 0.04,
+                    color: secondary,
+                    fontWeight: FontWeight.w600),
                     ),
                   ),
                 ),
