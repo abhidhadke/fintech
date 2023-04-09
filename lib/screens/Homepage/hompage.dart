@@ -4,6 +4,7 @@ import 'package:fintech/network/model/users.dart' as user;
 import 'package:fintech/screens/Stocks/stock_screeen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../main.dart';
 import '../News/News_page.dart';
 import '../PortFolio/portfolio.dart';
 import 'components/HomeCard.dart';
@@ -14,6 +15,7 @@ import 'components/stock_card.dart';
 class Homepage extends StatefulWidget {
   final String uid;
 
+
   const Homepage({Key? key, required this.uid}) : super(key: key);
 
   @override
@@ -21,26 +23,29 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+
+  late Stream<QuerySnapshot<Map<String, dynamic>>> _newsStream;
+  late Stream<QuerySnapshot<Map<String, dynamic>>> _stocksStream;
+
   @override
   void initState() {
-    getUserDetails();
+    _newsStream = FirebaseFirestore.instance
+        .collection('news_alerts')
+        .orderBy('news_time', descending: true)
+        .snapshots();
+    _stocksStream = FirebaseFirestore.instance
+        .collection('company')
+        .snapshots();
     super.initState();
   }
 
-  getUserDetails() async {
-    await user.setData();
-    final db = FirebaseFirestore.instance;
-    final data = await db.collection('users').doc(user.uid).get();
-    user.userName = data.data()!['username'];
-    user.userTokens = data.data()!['tokens'];
-    setState(() {});
-    //debugPrint(UserTokens);
-  }
+
 
 
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('building home');
     return LayoutBuilder(
       builder: (context, constraint) {
         return SafeArea(
@@ -165,7 +170,7 @@ class _HomepageState extends State<Homepage> {
                                   child: Icon(
                                     Icons.chevron_right,
                                     color: bgSecondary,
-                                    size: constraint.maxWidth * 0.1,
+                                    size: constraint.maxWidth * 0.09,
                                   ),
                                 ),
                               ],
@@ -197,10 +202,7 @@ class _HomepageState extends State<Homepage> {
                                     left: 20, right: 20, top: 8, bottom: 8),
                                 child: StreamBuilder<
                                     QuerySnapshot<Map<String, dynamic>>>(
-                                  stream: FirebaseFirestore.instance
-                                      .collection('news_alerts')
-                                      .orderBy('news_time', descending: true)
-                                      .snapshots(),
+                                  stream: _newsStream,
                                   builder: (context, snapshot) {
                                     if (!snapshot.hasData) {
                                       return Center(
@@ -258,9 +260,7 @@ class _HomepageState extends State<Homepage> {
                                 height: constraint.maxHeight * 0.6,
                                 child: StreamBuilder<
                                     QuerySnapshot<Map<String, dynamic>>>(
-                                  stream: FirebaseFirestore.instance
-                                      .collection('company')
-                                      .snapshots(),
+                                  stream: _stocksStream,
                                   builder: (context, snapshot) {
                                     if (!snapshot.hasData) {
                                       return Center(

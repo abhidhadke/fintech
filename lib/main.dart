@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintech/network/notification_helper.dart';
 import 'package:fintech/screens/Homepage/hompage.dart';
 import 'package:fintech/screens/Login/login_screen.dart';
@@ -7,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'network/model/users.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 @pragma('vm:entry-point')
@@ -27,16 +30,25 @@ Future<void> main() async {
   }catch(e){
     debugPrint('$e');
   }
-  // final fcm = await FirebaseMessaging.instance.getToken();
-  // debugPrint(fcm);
+
 
   final prefs = await SharedPreferences.getInstance();
   bool login = prefs.getBool('login') ?? false;
   String uid = prefs.getString('uid') ?? '';
   debugPrint('Is user Logged in? : $login');
-  
+  await getUserDetails();
 
   runApp(MyApp(isLoggedIn: login, uid: uid,));
+}
+
+getUserDetails() async {
+  await setData();
+  final db = FirebaseFirestore.instance;
+  final data = await db.collection('users').doc(uid).get();
+  userName = data.data()!['username'];
+  userTokens = data.data()!['tokens'];
+
+  //debugPrint(UserTokens);
 }
 
 class MyApp extends StatelessWidget {

@@ -12,8 +12,21 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State<NewsPage> {
+
+  late Stream<QuerySnapshot<Map<String, dynamic>>> _newsStream;
+
+  @override
+  void initState() {
+    _newsStream = FirebaseFirestore.instance
+        .collection('news_alerts')
+        .orderBy('news_time', descending: true)
+        .snapshots();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    debugPrint('building news');
     return LayoutBuilder(builder: (context, constraints) {
       return WillPopScope(
         onWillPop: () {
@@ -38,10 +51,7 @@ class _NewsPageState extends State<NewsPage> {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 30, left: 10, right: 10),
                     child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                      stream: FirebaseFirestore.instance
-                          .collection('news_alerts')
-                          .orderBy('news_time', descending: true)
-                          .snapshots(),
+                      stream: _newsStream,
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
                           return Center(
