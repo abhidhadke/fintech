@@ -4,17 +4,13 @@ import 'package:fintech/network/model/users.dart' as user;
 import 'package:fintech/screens/Stocks/stock_screeen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../main.dart';
 import '../News/News_page.dart';
-import '../PortFolio/portfolio.dart';
 import 'components/HomeCard.dart';
 import 'components/stock_card.dart';
-
-
+import 'components/user_display.dart';
 
 class Homepage extends StatefulWidget {
   final String uid;
-
 
   const Homepage({Key? key, required this.uid}) : super(key: key);
 
@@ -23,25 +19,10 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-
-  late Stream<QuerySnapshot<Map<String, dynamic>>> _newsStream;
-  late Stream<QuerySnapshot<Map<String, dynamic>>> _stocksStream;
-
   @override
   void initState() {
-    _newsStream = FirebaseFirestore.instance
-        .collection('news_alerts')
-        .orderBy('news_time', descending: true)
-        .snapshots();
-    _stocksStream = FirebaseFirestore.instance
-        .collection('company')
-        .snapshots();
     super.initState();
   }
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -101,80 +82,26 @@ class _HomepageState extends State<Homepage> {
                           ),
                           Padding(
                             padding: EdgeInsets.all(constraint.maxWidth * 0.05),
-                            child: Row(
-                              children: [
-                                Container(
-                                  decoration: const BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
-                                    color: bgSecondary,
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 10),
-                                  child: Text(
-                                    'Welcome,\n${user.userName} !',
-                                    style: TextStyle(
-                                      fontSize: constraint.maxWidth * 0.06,
-                                      color: secondary,
-                                    ),
-                                  ),
-                                ),
-                                const Spacer(),
-                                Container(
-                                  decoration: const BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(40.0)),
-                                    color: bgSecondary,
-                                  ),
-                                  height: constraint.maxHeight * 0.08,
-                                  width: constraint.maxWidth * 0.35,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      InkWell(
-                                        child: Text(
-                                          '${user.userTokens} T',
-                                          style: TextStyle(
-                                              fontSize:
-                                                  constraint.maxWidth * 0.075,
-                                              fontWeight: FontWeight.w600,
-                                              color: secondary),
-                                        ),
-                                        onTap: () async {
-                                          var push = await Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const PortFolio()));
-                                          if(push == true){
-                                           await getUserDetails();
-                                          }
-                                        },
+                            child: StreamBuilder<
+                                    DocumentSnapshot<Map<String, dynamic>>>(
+                                stream: user.userData,
+                                builder: (context,
+                                    AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(
+                                        color: Colors.blue,
                                       ),
-                                    ],
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: () async {
-                                    var push = await Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                            const PortFolio()));
-                                    if(push == true){
-                                      await getUserDetails();
-                                    }
-                                  },
-                                  child: Icon(
-                                    Icons.chevron_right,
-                                    color: bgSecondary,
-                                    size: constraint.maxWidth * 0.09,
-                                  ),
-                                ),
-                              ],
-                            ),
+                                    );
+                                  }
+                                  Map<String, dynamic> userDocument = snapshot.data?.data()
+                                          as Map<String, dynamic>;
+                                  user.userTokens = userDocument['tokens'];
+                                  return UserDisplay(
+                                    userDocument: userDocument,
+                                    constraint: constraint,
+                                  );
+                                }),
                           ),
                         ],
                       ),
@@ -202,7 +129,7 @@ class _HomepageState extends State<Homepage> {
                                     left: 20, right: 20, top: 8, bottom: 8),
                                 child: StreamBuilder<
                                     QuerySnapshot<Map<String, dynamic>>>(
-                                  stream: _newsStream,
+                                  stream: user.newsStream,
                                   builder: (context, snapshot) {
                                     if (!snapshot.hasData) {
                                       return Center(
@@ -228,12 +155,13 @@ class _HomepageState extends State<Homepage> {
                                             const EdgeInsets.only(right: 5),
                                         itemBuilder: (context, index) {
                                           return InkWell(
-                                            onTap: ()async{
-                                              var push = await Navigator.push(context, MaterialPageRoute(builder: (_)=>const NewsPage()));
-                                              if(push == true){
-                                                await getUserDetails();
-                                              }
-                                              },
+                                            onTap: () async {
+                                              await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (_) =>
+                                                          const NewsPage()));
+                                            },
                                             child: HomeCard(
                                               constraint: constraint,
                                               title: userData[index]
@@ -260,7 +188,7 @@ class _HomepageState extends State<Homepage> {
                                 height: constraint.maxHeight * 0.6,
                                 child: StreamBuilder<
                                     QuerySnapshot<Map<String, dynamic>>>(
-                                  stream: _stocksStream,
+                                  stream: user.stocksStream,
                                   builder: (context, snapshot) {
                                     if (!snapshot.hasData) {
                                       return Center(
@@ -289,17 +217,25 @@ class _HomepageState extends State<Homepage> {
                                             const EdgeInsets.only(right: 5),
                                         itemBuilder: (context, index) {
                                           return InkWell(
-                                            onTap: ()async{
-                                              var push = await Navigator.push(context, MaterialPageRoute(builder: (_)=>StocksScreen(stockName: userData[index]['name'], stockPrice: userData[index]['price'])));
-                                              if(push == true){
-                                                await getUserDetails();
-                                              }
-                                              },
+                                            onTap: () async {
+                                              await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (_) =>
+                                                          StocksScreen(
+                                                              stockName:
+                                                                  userData[index]['name'],
+                                                              stockPrice:
+                                                                  userData[index]['price'])));
+                                            },
                                             child: StocksCard(
                                               constraint: constraint,
-                                              stockName: userData[index]['name'],
-                                              stockLogo: userData[index]['link'],
-                                              stockPrice: userData[index]['price']
+                                              stockName: userData[index]
+                                                  ['name'],
+                                              stockLogo: userData[index]
+                                                  ['link'],
+                                              stockPrice: userData[index]
+                                                      ['price']
                                                   .toDouble(),
                                               stockChange: userData[index]
                                                       ['incdec']

@@ -1,12 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintech/constants.dart';
-import 'package:fintech/screens/Homepage/components/stock_card.dart';
 import 'package:fintech/screens/PortFolio/components/appBar.dart';
 import 'package:flutter/material.dart';
 import 'package:fintech/network/model/users.dart' as user;
 import 'package:google_fonts/google_fonts.dart';
-
-import '../../network/model/users.dart';
 
 class PortFolio extends StatefulWidget {
   const PortFolio({Key? key}) : super(key: key);
@@ -18,19 +15,16 @@ class PortFolio extends StatefulWidget {
 class _PortFolioState extends State<PortFolio> {
   @override
   void initState() {
-    // TODO: implement initState
     getUserDetails();
     super.initState();
   }
 
   final docRef = FirebaseFirestore.instance.collection('users').doc(user.uid);
-  var excludedfields;
   late QuerySnapshot<Map<String, dynamic>> stockData;
-  Map<String, dynamic>? allfields = {};
-  late var allData;
+  Map<String, dynamic>? allFields = {};
+  late List allData;
 
   getUserDetails() async {
-    await user.setData();
     final db = FirebaseFirestore.instance;
     final data = await db.collection('users').doc(user.uid).get();
     stockData = await db.collection('company').get();
@@ -42,19 +36,17 @@ class _PortFolioState extends State<PortFolio> {
 
     await docRef.get().then((doc) {
       if (doc.exists) {
-        allfields = doc.data();
+        allFields = doc.data();
         for (String i in exclude) {
-          if (allfields!.containsKey(i)) {
-            allfields!.remove(i);
+          if (allFields!.containsKey(i)) {
+            allFields!.remove(i);
           }
 
         }
-        //excludedfields = allfields?.keys.toList().sublist(3);
       }
     });
 
     setState(() {});
-    //debugPrint(UserTokens);
   }
 
   Map<String, dynamic> getMapByName(String name) {
@@ -68,8 +60,8 @@ class _PortFolioState extends State<PortFolio> {
 
   @override
   Widget build(BuildContext context) {
-    List stockNames = allfields!.keys.toList();
-    List stockCount = allfields!.values.toList();
+    List stockNames = allFields!.keys.toList();
+    List stockCount = allFields!.values.toList();
     return WillPopScope(
       onWillPop: (){
         Navigator.pop(context, true);
@@ -87,7 +79,7 @@ class _PortFolioState extends State<PortFolio> {
                 children: [
                   SizedBox(height: constraints.maxHeight*0.05,),
                   Text(
-                    'Hello $userName !',
+                    'Hello ${user.userName} !',
                     style: const TextStyle(
                       fontSize: 40,
                       color: secondary,
@@ -104,8 +96,11 @@ class _PortFolioState extends State<PortFolio> {
                   ),
                   SizedBox(height: constraints.maxHeight*0.05,),
                   Expanded(
-                    child: ListView.builder(
-                        itemCount: allfields!.length,
+                    child: allFields!.isEmpty ? const Align(
+                      alignment: Alignment.topCenter,
+                      child: CircularProgressIndicator(),
+                    ) : ListView.builder(
+                        itemCount: allFields!.length,
                         itemBuilder: (context2, index) {
                           Map price = getMapByName(stockNames[index]);
                           var stockPrice = price['price'] ?? 0;
@@ -155,7 +150,7 @@ class _PortFolioState extends State<PortFolio> {
                                     ),
                                   ),
                                 )
-                              : Container();
+                              : const SizedBox();
                         }),
                   )
                 ],

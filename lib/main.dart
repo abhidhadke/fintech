@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintech/network/notification_helper.dart';
 import 'package:fintech/screens/Homepage/hompage.dart';
 import 'package:fintech/screens/Login/login_screen.dart';
@@ -27,6 +26,7 @@ Future<void> main() async {
     final RemoteMessage? message = await FirebaseMessaging.instance.getInitialMessage();
     await HelperNotification.initialize(flutterLocalNotificationsPlugin);
     FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
+    debugPrint('Message came from ${message?.from}');
   }catch(e){
     debugPrint('$e');
   }
@@ -36,20 +36,11 @@ Future<void> main() async {
   bool login = prefs.getBool('login') ?? false;
   String uid = prefs.getString('uid') ?? '';
   debugPrint('Is user Logged in? : $login');
-  await getUserDetails();
+  await setData();
 
   runApp(MyApp(isLoggedIn: login, uid: uid,));
 }
 
-getUserDetails() async {
-  await setData();
-  final db = FirebaseFirestore.instance;
-  final data = await db.collection('users').doc(uid).get();
-  userName = data.data()!['username'];
-  userTokens = data.data()!['tokens'];
-
-  //debugPrint(UserTokens);
-}
 
 class MyApp extends StatelessWidget {
   final bool isLoggedIn;

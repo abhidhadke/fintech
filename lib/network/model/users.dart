@@ -5,12 +5,28 @@ import 'package:shared_preferences/shared_preferences.dart';
 String? userName;
 int userTokens = 0;
 String? uid;
+late Stream<QuerySnapshot<Map<String, dynamic>>> newsStream;
+late Stream<QuerySnapshot<Map<String, dynamic>>> stocksStream;
+late Stream<DocumentSnapshot<Map<String, dynamic>>> userData;
 
-var stockData;
+List<QueryDocumentSnapshot<Map<String, dynamic>>> ?stockData = [];
 
 setData() async {
-  final prefs = await SharedPreferences.getInstance();
-  uid = prefs.getString('uid');
+  try{
+    final prefs = await SharedPreferences.getInstance();
+    final db = FirebaseFirestore.instance;
+    uid = prefs.getString('uid');
+    newsStream = db
+        .collection('news_alerts')
+        .orderBy('news_time', descending: true)
+        .snapshots();
+    stocksStream = db
+        .collection('company')
+        .snapshots();
+    userData = db.collection('users').doc(uid).snapshots();
+  }catch(e){
+    debugPrint('$e');
+  }
 }
 
 buyStocks(String stockName, int amount, int price) async {

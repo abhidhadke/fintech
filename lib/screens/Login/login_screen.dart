@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintech/constants.dart';
 import 'package:fintech/screens/Homepage/hompage.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'components/textfield.dart';
+import 'package:fintech/network/model/users.dart' as userID;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -77,8 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 color: Colors.redAccent,
                                 fontStyle: FontStyle.italic),
                           )
-                        ]
-                            .map((e) => Padding(
+                        ].map((e) => Padding(
                                   padding: EdgeInsets.only(
                                       left: constraints.maxWidth * 0.09),
                                   child: e,
@@ -149,6 +150,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               uid = userData.uid;
                               await prefs.setString('uid', uid);
                               debugPrint(uid);
+                              userID.uid = prefs.getString('uid');
+                              userID.userData = FirebaseFirestore.instance.collection('users').doc(uid).snapshots();
                               await _pushtoNextScreen();
                             } else {
                               setState(() {
